@@ -9,6 +9,7 @@
 #import "SEViewController.h"
 
 #import <SEUIKit/SECameraViewController.h>
+#import <PBJVision/PBJVision.h>
 
 @interface SEViewController ()
 
