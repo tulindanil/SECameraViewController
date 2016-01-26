@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SEUIKit"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "User interface kit for Smart Engines"
 
 # This description is used to generate tags and improve search results.
@@ -16,10 +16,11 @@ Pod::Spec.new do |s|
 #   * Try to keep it short, snappy and to the point.
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!  
-  s.description      = "SECameraViewCOntroller for a lot of Smart Engines projects"
+  s.description      =  <<-DESC
+                        SECameraViewCOntroller for a lot of Smart Engines projects"
+                        DESC
 
   s.homepage         = "https://github.com/tulindanil/SEUIKit"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "tulindanil" => "tulindanil@gmail.com" }
   s.source           = { :git => "https://github.com/tulindanil/SEUIKit.git", :tag => "0.1.1" }
