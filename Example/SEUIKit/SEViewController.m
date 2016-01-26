@@ -8,7 +8,7 @@
 
 #import "SEViewController.h"
 
-@import SEUIKit;
+#import <SEUIKit/SECameraViewController.h>
 
 @interface SEViewController ()
 
