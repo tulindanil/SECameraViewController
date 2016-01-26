@@ -12,6 +12,8 @@
 
 @interface SEViewController ()
 
+@property (nonatomic, strong) UIButton *cameraButton;
+
 @end
 
 @implementation SEViewController
@@ -26,6 +28,16 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Camera Button
+
+- (UIButton *)cameraButton {
+	if (_cameraButton)
+		return _cameraButton;
+		
+	_cameraButton = [[UIButton alloc] init];
+	return _cameraButton;
 }
 
 @end
