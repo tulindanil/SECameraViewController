@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'SEUIKit_Example', :exclusive => true do
+  pod 'SEUIKit', :path => '../'
+end
+
+target 'SEUIKit_Tests', :exclusive => true do
+  pod 'SEUIKit', :path => '../'
+
+  
+end
