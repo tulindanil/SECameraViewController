@@ -9,6 +9,8 @@
 #import "SEAppDelegate.h"
 #import "SEViewController.h"
 
+#import <SEUIKit/SEUIKit.h>
+
 @implementation SEAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -19,6 +21,7 @@
 												   initWithRootViewController:viewController];
 	self.window.rootViewController = navigationController;
 	[self.window makeKeyAndVisible];
+	
 	return YES;
 }
 
