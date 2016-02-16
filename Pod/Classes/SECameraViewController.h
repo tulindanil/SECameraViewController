@@ -6,8 +6,26 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+@import AVFoundation;
 
+@protocol SECameraViewControllerDelegate;
 @interface SECameraViewController : UIViewController
+
+- (instancetype)initWithDelegate:(id<SECameraViewControllerDelegate>)delegate;
+@property (nonatomic, weak) id<SECameraViewControllerDelegate> delegate;
+
+@property (nonatomic, readonly) AVCaptureVideoPreviewLayer *previewLayer;
+
+@end
+
+@protocol SECameraViewControllerDelegate <NSObject>
+
+@optional
+
+- (void)cameraViewController:(SECameraViewController *)cameraViewController
+ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+
+@required
 
 @end
