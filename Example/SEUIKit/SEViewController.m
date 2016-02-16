@@ -8,8 +8,7 @@
 
 #import "SEViewController.h"
 
-#import <SEUIKit/SECameraViewController.h>
-#import <PBJVision/PBJVision.h>
+#import <SEUIKit/SEUIKit.h>
 
 @interface SEViewController ()
 
@@ -19,26 +18,56 @@
 
 @implementation SEViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	self.view.backgroundColor = [UIColor whiteColor];
+	
+	UINavigationBar *navigationBar = self.navigationController.navigationBar;
+	
+	navigationBar.barStyle = UIStatusBarStyleLightContent;
+	navigationBar.translucent = NO;
+	navigationBar.barTintColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+	
+	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self.view addSubview:self.cameraButton];
+	CGRect bounds = self.view.bounds;
+	self.cameraButton.center = CGPointMake(CGRectGetMidX(bounds),
+										   CGRectGetMidY(bounds));
 }
 
 #pragma mark - Camera Button
 
 - (UIButton *)cameraButton {
-	if (_cameraButton)
-		return _cameraButton;
-		
+	if (_cameraButton) return _cameraButton;
+	
 	_cameraButton = [[UIButton alloc] init];
+	[_cameraButton setTitle:@"Use Camera"
+				   forState:UIControlStateNormal];
+	[_cameraButton addTarget:self
+					  action:@selector(didTapCamera:)
+			forControlEvents:UIControlEventTouchUpInside];
+	
+	[_cameraButton sizeToFit];
+	
 	return _cameraButton;
+}
+
+- (void)didTapCamera:(id)sender {
+	SECameraViewController *cameraViewController = [[SECameraViewController alloc]
+													init];
+	[self presentViewController:cameraViewController
+					   animated:YES
+					 completion:nil];
 }
 
 @end
