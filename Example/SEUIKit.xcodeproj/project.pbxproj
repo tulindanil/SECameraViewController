@@ -130,8 +130,6 @@
 		6003F593195388D20070C39A /* Example for SEUIKit */ = {
 			isa = PBXGroup;
 			children = (
-				6003F59C195388D20070C39A /* SEAppDelegate.h */,
-				6003F59D195388D20070C39A /* SEAppDelegate.m */,
 				6003F5A5195388D20070C39A /* SEViewController.h */,
 				6003F5A6195388D20070C39A /* SEViewController.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
@@ -149,6 +147,8 @@
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
 				6003F59B195388D20070C39A /* SEUIKit-Prefix.pch */,
+				6003F59C195388D20070C39A /* SEAppDelegate.h */,
+				6003F59D195388D20070C39A /* SEAppDelegate.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
