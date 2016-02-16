@@ -6,8 +6,6 @@
 //
 //
 
-#ifndef SEUIKit_h
-#define SEUIKit_h
-
-
-#endif /* SEUIKit_h */
+#import <SEUIKit/SECameraViewController.h>
+#import <MPColorTools/MPColorTools.h>
+#import <SEUIKit/Constants.h>
