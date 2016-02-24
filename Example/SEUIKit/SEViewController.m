@@ -29,6 +29,8 @@
 	navigationBar.barTintColor = MP_HEX_RGB([defaultPrimaryColor copy]);
 	
 	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
+	
+	[self.view setNeedsUpdateConstraints];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,9 +42,14 @@
 	[super viewWillAppear:animated];
 	
 	[self.view addSubview:self.cameraButton];
-	CGRect bounds = self.view.bounds;
-	self.cameraButton.center = CGPointMake(CGRectGetMidX(bounds),
-										   CGRectGetMidY(bounds));
+}
+
+- (void)updateViewConstraints {
+	[super updateViewConstraints];
+	
+	[self.cameraButton mas_updateConstraints:^(MASConstraintMaker *make) {
+		make.center.equalTo(self.view);
+	}];
 }
 
 #pragma mark - Camera Button
