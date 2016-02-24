@@ -13,4 +13,8 @@
 
 const static NSString *defaultPrimaryColor = @"1A1A1C";
 const static NSString *darkPrimaryColor = @"121315";
+
+const static NSInteger bottomToolbarHeight = 50;
+
+const static CGFloat defaultAnimationDuration = .3f;
 #endif /* Constants_h */
