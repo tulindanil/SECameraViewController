@@ -9,6 +9,13 @@
 @import UIKit;
 @import AVFoundation;
 
+typedef NS_ENUM(NSInteger, SEOutputFormat) {
+	SEOutputFormatPreset = 0,
+	SEOutputFormatSquare, // 1:1
+	SEOutputFormatWidescreen, // 16:9
+	SEOutputFormatStandard // 4:3
+};
+
 @protocol SECameraViewControllerDelegate;
 @interface SECameraViewController : UIViewController
 
