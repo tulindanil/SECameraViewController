@@ -22,8 +22,6 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 - (instancetype)initWithDelegate:(id<SECameraViewControllerDelegate>)delegate;
 @property (nonatomic, weak) id<SECameraViewControllerDelegate> delegate;
 
-@property (nonatomic, readonly) AVCaptureVideoPreviewLayer *previewLayer;
-
 @end
 
 @protocol SECameraViewControllerDelegate <NSObject>
