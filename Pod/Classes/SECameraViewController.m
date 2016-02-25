@@ -10,11 +10,12 @@
 
 #import <PBJVision/PBJVision.h>
 
+#import "SEPreviewView.h"
 #import "SEShutterView.h"
 
 @interface SECameraViewController () <PBJVisionDelegate>
 
-@property (nonatomic, readwrite) UIView *previewView;
+@property (nonatomic, strong) SEPreviewView *previewView;
 @property (nonatomic, strong) SEShutterView *shutterView;
 
 @property (nonatomic, strong) UIButton *closeButton;
@@ -41,26 +42,25 @@
 	
 	[self.view addSubview:self.previewView];
 	[self.view addSubview:self.closeButton];
+	
+	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	[self.shutterView openWithCompletion:^{
-		[self.vision startPreview];
-	}];
+	
+	[self visionDidStartVideoCapture:self.vision];
 }
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
-	self.vision.previewLayer.frame = self.previewLayer.bounds;
+	self.vision.previewLayer.frame = self.previewView.bounds;
 }
 
 - (void)updateViewConstraints {
-	[super updateViewConstraints];
-	
 	[self.previewView mas_updateConstraints:^(MASConstraintMaker *make) {
-		make.left.right.equalTo(self.view);
+		if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
+			make.width.equalTo(self.view.mas_height);
+		} else {
+			make.width.equalTo(self.view.mas_width);
+		}
 		make.center.equalTo(self.view);
 		make.height.equalTo(self.previewView.mas_width);
 	}];
@@ -70,9 +70,12 @@
 	}];
 	
 	[self.closeButton mas_updateConstraints:^(MASConstraintMaker *make) {
-		make.left.right.bottom.equalTo(self.view);
-		make.height.equalTo(@(bottomToolbarHeight));
+		make.width.equalTo(self.view.mas_width);
+		make.bottom.equalTo(self.view.mas_bottom);
+		make.height.equalTo(@(.1f * CGRectGetHeight(self.view.frame)));
 	}];
+	
+	[super updateViewConstraints];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -103,10 +106,15 @@
 
 - (void)dismissViewControllerAnimated:(BOOL)flag
 						   completion:(void (^)(void))completion {
-	[self.shutterView closeWithCompletion:^{
+	if (self.shutterView.isOpen) {
+		[self.shutterView closeWithCompletion:^{
+			[super dismissViewControllerAnimated:flag
+									  completion:completion];
+		}];
+	} else {
 		[super dismissViewControllerAnimated:flag
 								  completion:completion];
-	}];
+	}
 }
 
 #pragma mark - PreviewView
@@ -115,8 +123,8 @@
 	if (_previewView)
 		return _previewView;
 	
-	_previewView = [[UIView alloc] init];
-	_previewView.backgroundColor = [UIColor greenColor];
+	_previewView = [[SEPreviewView alloc] init];
+	_previewView.backgroundColor = [UIColor blackColor];
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
 	previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -148,10 +156,20 @@
 
 #pragma mark - Vision Delegate
 
+- (void)visionSessionDidStart:(PBJVision *)vision {
+	[self.vision startVideoCapture];
+}
+
+- (void)visionDidStartVideoCapture:(PBJVision *)vision {
+	[self.shutterView open];
+}
+
 - (void)vision:(PBJVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-	[self.delegate cameraViewController:self
-			didCaptureVideoSampleBuffer:sampleBuffer];
+	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
+		[self.delegate cameraViewController:self
+				didCaptureVideoSampleBuffer:sampleBuffer];
+	}
 }
 
 #pragma mark - UIViewController
