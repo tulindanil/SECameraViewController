@@ -92,8 +92,6 @@
 	CGFloat height = self.isOpen ? 0 : CGRectGetHeight(self.frame)/2;
 	CGFloat width = CGRectGetWidth(self.frame);
 	
-	NSLog(@"%f", height);
-	
 	CGFloat yBottomView = CGRectGetHeight(self.frame) - height;
 	
 	CGRect upFrame = CGRectMake(0, 0, width, height);
