@@ -19,4 +19,6 @@ const static NSInteger bottomToolbarHeight = 50;
 const static CGFloat defaultAnimationDuration = .3f;
 
 const static NSInteger predscriptionViewCornerViewOffset = 25;
+
+const static CGSize SERoundButtonsContainerOffset = {25, 20};
 #endif /* Constants_h */
