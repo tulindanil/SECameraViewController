@@ -2,8 +2,6 @@
 
 [![CI Status](http://img.shields.io/travis/tulindanil/SEUIKit.svg?style=flat)](https://travis-ci.org/tulindanil/SEUIKit)
 [![Version](https://img.shields.io/cocoapods/v/SEUIKit.svg?style=flat)](http://cocoapods.org/pods/SEUIKit)
-[![License](https://img.shields.io/cocoapods/l/SEUIKit.svg?style=flat)](http://cocoapods.org/pods/SEUIKit)
-[![Platform](https://img.shields.io/cocoapods/p/SEUIKit.svg?style=flat)](http://cocoapods.org/pods/SEUIKit)
 
 ## Usage
 
