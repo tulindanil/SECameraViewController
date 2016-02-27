@@ -38,7 +38,7 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		self.rect = CGRectMake(0, 0, 4, 30);
+		self.rect = CGRectMake(0, 0, 1, 20);
 	}
 	return self;
 }
