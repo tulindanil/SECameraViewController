@@ -31,24 +31,24 @@
 }
 
 - (void)updateConstraints {
-	[self.topLeft mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.topLeft mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.topLeft];
 		make.left.top.equalTo(self).offset(predscriptionViewCornerViewOffset);
 	}];
-	[self.topRight mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.topRight mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.topRight];
 		make.top.equalTo(self).offset(predscriptionViewCornerViewOffset);
 		make.right.equalTo(self).offset(-predscriptionViewCornerViewOffset);
 	}];
-	[self.bottomLeft mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.bottomLeft mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.bottomLeft];
 		make.bottom.equalTo(self).offset(-predscriptionViewCornerViewOffset);
 		make.left.equalTo(self).offset(predscriptionViewCornerViewOffset);
 	}];
-	[self.bottomRight mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.bottomRight mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.bottomRight];
 		make.right.bottom.equalTo(self).offset(-predscriptionViewCornerViewOffset);
