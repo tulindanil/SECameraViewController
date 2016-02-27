@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) PBJVision *vision;
 
+@property (nonatomic, getter=isAppeared) BOOL appeared;
+
 @end
 
 @implementation SECameraViewController
@@ -45,24 +47,24 @@
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
-	
-	[self visionDidStartVideoCapture:self.vision];
 }
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	self.vision.previewLayer.frame = self.previewView.bounds;
+	[self.previewView bringSubviewToFront:self.shutterView];
 }
 
 - (void)updateViewConstraints {
 	[self.previewView mas_updateConstraints:^(MASConstraintMaker *make) {
-		if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
-			make.width.equalTo(self.view.mas_height);
-		} else {
-			make.width.equalTo(self.view.mas_width);
+		if (self.outputFormat == SEOutputFormatSquare) {
+			make.width.equalTo(self.view);
+			make.center.equalTo(self.view);
+			make.height.equalTo(self.previewView.mas_width);
+		} else if (self.outputFormat == SEOutputFormatWidescreen) {
+			make.top.left.right.equalTo(self.view);
+			make.bottom.equalTo(self.closeButton.mas_top);
 		}
-		make.center.equalTo(self.view);
-		make.height.equalTo(self.previewView.mas_width);
 	}];
 	
 	[self.shutterView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -72,10 +74,21 @@
 	[self.closeButton mas_updateConstraints:^(MASConstraintMaker *make) {
 		make.width.equalTo(self.view.mas_width);
 		make.bottom.equalTo(self.view.mas_bottom);
-		make.height.equalTo(@(.1f * CGRectGetHeight(self.view.frame)));
+		make.height.equalTo(@(.15f * CGRectGetWidth(self.view.frame)));
 	}];
 	
 	[super updateViewConstraints];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	self.appeared = YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	RUN_IF_SIMULATOR([self visionDidStartVideoCapture:self.vision];)
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -107,10 +120,10 @@
 - (void)dismissViewControllerAnimated:(BOOL)flag
 						   completion:(void (^)(void))completion {
 	if (self.shutterView.isOpen) {
-		[self.shutterView closeWithCompletion:^{
-			[super dismissViewControllerAnimated:flag
-									  completion:completion];
-		}];
+		[super dismissViewControllerAnimated:flag
+								  completion:completion];
+		[self.shutterView closeWithDuration:.15f
+							 withCompletion:nil];
 	} else {
 		[super dismissViewControllerAnimated:flag
 								  completion:completion];
@@ -169,13 +182,27 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
 		[self.delegate cameraViewController:self
 				didCaptureVideoSampleBuffer:sampleBuffer];
+	} else {
+		NSLog(@"SECameraViewController: no suitable delegate class for capturing sample data");
+	}
+}
+
+#pragma mark - OutputFormat
+
+- (void)setOutputFormat:(SEOutputFormat)outputFormat {
+	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
+	_outputFormat = outputFormat;
+	if (_outputFormat == SEOutputFormatSquare) {
+		self.vision.outputFormat = PBJOutputFormatSquare;
+	} else {
+		self.vision.outputFormat = PBJOutputFormatWidescreen;
 	}
 }
 
 #pragma mark - UIViewController
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+- (BOOL)prefersStatusBarHidden {
+	return YES;
 }
 
 @end

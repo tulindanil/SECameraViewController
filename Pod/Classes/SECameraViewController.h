@@ -10,10 +10,8 @@
 @import AVFoundation;
 
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
-	SEOutputFormatPreset = 0,
 	SEOutputFormatSquare, // 1:1
 	SEOutputFormatWidescreen, // 16:9
-	SEOutputFormatStandard // 4:3
 };
 
 @protocol SECameraViewControllerDelegate;
@@ -21,6 +19,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 - (instancetype)initWithDelegate:(id<SECameraViewControllerDelegate>)delegate;
 @property (nonatomic, weak) id<SECameraViewControllerDelegate> delegate;
+
+@property (nonatomic) SEOutputFormat outputFormat;
 
 @end
 
