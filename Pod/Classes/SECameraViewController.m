@@ -12,6 +12,7 @@
 
 #import "SEPreviewView.h"
 #import "SEShutterView.h"
+#import "SERoundButtonsContainer.h"
 
 @interface SECameraViewController () <PBJVisionDelegate>
 
@@ -23,6 +24,10 @@
 @property (nonatomic, strong) PBJVision *vision;
 
 @property (nonatomic, getter=isAppeared) BOOL appeared;
+
+@property (nonatomic, strong) SERoundButtonsContainer *buttonsContainer;
+
+@property (nonatomic, strong) UIButton *lightButton;
 
 @end
 
@@ -44,6 +49,7 @@
 	
 	[self.view addSubview:self.previewView];
 	[self.view addSubview:self.closeButton];
+	[self.view addSubview:self.buttonsContainer];
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
@@ -56,10 +62,10 @@
 }
 
 - (void)updateViewConstraints {
-	[self.previewView mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.previewView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		if (self.outputFormat == SEOutputFormatSquare) {
-			make.width.equalTo(self.view);
 			make.center.equalTo(self.view);
+			make.width.equalTo(self.view);
 			make.height.equalTo(self.previewView.mas_width);
 		} else if (self.outputFormat == SEOutputFormatWidescreen) {
 			make.top.left.right.equalTo(self.view);
@@ -74,10 +80,23 @@
 	[self.closeButton mas_updateConstraints:^(MASConstraintMaker *make) {
 		make.width.equalTo(self.view.mas_width);
 		make.bottom.equalTo(self.view.mas_bottom);
-		make.height.equalTo(@(.15f * CGRectGetWidth(self.view.frame)));
+		make.height.equalTo(@(50));
+	}];
+	
+	[self.buttonsContainer mas_updateConstraints:^(MASConstraintMaker *make) {
+		make.bottom.equalTo(self.closeButton.mas_top).offset(-8);
+		make.centerX.equalTo(self.view);
 	}];
 	
 	[super updateViewConstraints];
+}
+
+- (void)executeIfLandscape:(void(^)(void))landscapeBlock ifPortrait:(void(^)(void))portraitBlock {
+	if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && landscapeBlock != nil) {
+		landscapeBlock();
+	} else if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && portraitBlock != nil) {
+		portraitBlock();
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -122,8 +141,7 @@
 	if (self.shutterView.isOpen) {
 		[super dismissViewControllerAnimated:flag
 								  completion:completion];
-		[self.shutterView closeWithDuration:.15f
-							 withCompletion:nil];
+		[self.shutterView close];
 	} else {
 		[super dismissViewControllerAnimated:flag
 								  completion:completion];
@@ -194,9 +212,37 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	_outputFormat = outputFormat;
 	if (_outputFormat == SEOutputFormatSquare) {
 		self.vision.outputFormat = PBJOutputFormatSquare;
-	} else {
+	} else if (_outputFormat == SEOutputFormatWidescreen) {
 		self.vision.outputFormat = PBJOutputFormatWidescreen;
 	}
+}
+
+#pragma mark - Buttons Container
+
+- (SERoundButtonsContainer *)buttonsContainer {
+	if (_buttonsContainer) {
+		return _buttonsContainer;
+	}
+	
+	_buttonsContainer = [[SERoundButtonsContainer alloc] init];
+	[_buttonsContainer addButton:self.lightButton];
+	
+	UIButton *oneMore = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
+	oneMore.backgroundColor = [UIColor redColor];
+	[_buttonsContainer addButton:oneMore];
+	
+	return _buttonsContainer;
+}
+
+- (UIButton *)lightButton {
+	if (_lightButton) {
+		return _lightButton;
+	}
+	
+	_lightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+	_lightButton.backgroundColor = [UIColor greenColor];
+	
+	return _lightButton;
 }
 
 #pragma mark - UIViewController
