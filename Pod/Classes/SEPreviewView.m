@@ -24,7 +24,7 @@
 }
 
 - (void)updateConstraints {
-	[self.predscriptionView mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.predscriptionView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self);
 	}];
 	
