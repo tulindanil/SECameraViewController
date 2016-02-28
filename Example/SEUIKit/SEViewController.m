@@ -8,8 +8,6 @@
 
 #import "SEViewController.h"
 
-#import <SEUIKit/SEUIKit.h>
-
 @interface SEViewController ()
 
 @property (nonatomic, strong) UIButton *cameraButton;
@@ -33,14 +31,8 @@
 	[self.view setNeedsUpdateConstraints];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
 	[self.view addSubview:self.cameraButton];
 }
 
@@ -55,7 +47,8 @@
 #pragma mark - Camera Button
 
 - (UIButton *)cameraButton {
-	if (_cameraButton) return _cameraButton;
+	if (_cameraButton)
+		return _cameraButton;
 	
 	_cameraButton = [[UIButton alloc] init];
 	[_cameraButton setTitle:@"Use Camera"
@@ -64,14 +57,13 @@
 					  action:@selector(didTapCamera:)
 			forControlEvents:UIControlEventTouchUpInside];
 	
-	[_cameraButton sizeToFit];
-	
 	return _cameraButton;
 }
 
 - (void)didTapCamera:(id)sender {
 	SECameraViewController *cameraViewController = [[SECameraViewController alloc]
 													init];
+	cameraViewController.outputFormat = SEOutputFormatSquare;
 	[self presentViewController:cameraViewController
 					   animated:YES
 					 completion:nil];
