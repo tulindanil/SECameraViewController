@@ -229,7 +229,7 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	
 	UIButton *oneMore = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
 	oneMore.backgroundColor = [UIColor redColor];
-	[_buttonsContainer addButton:oneMore];
+//	[_buttonsContainer addButton:oneMore];
 	
 	return _buttonsContainer;
 }
@@ -239,8 +239,9 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 		return _lightButton;
 	}
 	
-	_lightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-	_lightButton.backgroundColor = [UIColor greenColor];
+	_lightButton = [[UIButton alloc] init];
+	[_lightButton setTitle:@"Light" forState:UIControlStateNormal];
+	[_lightButton sizeToFit];
 	
 	return _lightButton;
 }
