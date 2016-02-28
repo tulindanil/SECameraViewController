@@ -12,5 +12,5 @@ script:
 - cd Example 
 - pod install 
 - cd ..
-- set -o pipefail && xcodebuild test -workspace Example/SEUIKit.xcworkspace -scheme SEUIKit-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty
+- set -o pipefail && xcodebuild -workspace Example/SEUIKit.xcworkspace -scheme SEUIKit-Example | xcpretty
 - pod lib lint
