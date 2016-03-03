@@ -64,6 +64,7 @@
 	SECameraViewController *cameraViewController = [[SECameraViewController alloc]
 													init];
 	cameraViewController.outputFormat = SEOutputFormatSquare;
+	cameraViewController.flashEnabled = YES;
 	[self presentViewController:cameraViewController
 					   animated:YES
 					 completion:nil];
