@@ -21,4 +21,13 @@ const static CGFloat defaultAnimationDuration = .3f;
 const static NSInteger predscriptionViewCornerViewOffset = 25;
 
 const static CGSize SERoundButtonsContainerOffset = {25, 20};
+
+#ifndef RUN_IF_SIMULATOR
+#ifdef TARGET_IPHONE_SIMULATOR
+#define RUN_IF_SIMULATOR(code) code
+#else
+#define RUN_IF_SIMULATOR(code)
+#endif
+#endif
+
 #endif /* Constants_h */
