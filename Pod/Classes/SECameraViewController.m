@@ -217,6 +217,13 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	}
 }
 
+#pragma mark - Flash Enabled
+
+- (void)setFlashEnabled:(BOOL)flashEnabled {
+	NSAssert(!self.isAppeared, @"Setting flash avalaibality format must be before loading view");
+	_flashEnabled = flashEnabled;
+}
+
 #pragma mark - Buttons Container
 
 - (SERoundButtonsContainer *)buttonsContainer {
@@ -225,7 +232,10 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	}
 	
 	_buttonsContainer = [[SERoundButtonsContainer alloc] init];
-	[_buttonsContainer addButton:self.lightButton];
+	
+	if (self.isFlashEnabled) {
+		[_buttonsContainer addButton:self.lightButton];
+	}
 	
 	UIButton *oneMore = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
 	oneMore.backgroundColor = [UIColor redColor];

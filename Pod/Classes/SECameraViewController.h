@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 @property (nonatomic, weak) id<SECameraViewControllerDelegate> delegate;
 
 @property (nonatomic) SEOutputFormat outputFormat;
+@property (nonatomic, getter=isFlashEnabled) BOOL flashEnabled;
 
 @end
 
