@@ -10,4 +10,9 @@
 
 @interface SEPredscriptionView : UIView
 
+@property (nonatomic, strong) NSString *predscription;
+
+- (void)showPredscriptionLabel:(BOOL)animated;
+- (void)hidePredscriptionLabel:(BOOL)animated;
+
 @end

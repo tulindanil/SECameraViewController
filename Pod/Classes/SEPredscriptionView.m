@@ -7,7 +7,6 @@
 //
 
 #import "SEPredscriptionView.h"
-
 #import "SECornerView.h"
 
 @interface SEPredscriptionView ()
@@ -16,6 +15,8 @@
 @property (nonatomic, strong) SECornerView *topRight;
 @property (nonatomic, strong) SECornerView *bottomLeft;
 @property (nonatomic, strong) SECornerView *bottomRight;
+
+@property (nonatomic, strong) UILabel *predscriptionLabel;
 
 @end
 
@@ -28,6 +29,8 @@
 	[self addSubview:self.topRight];
 	[self addSubview:self.bottomLeft];
 	[self addSubview:self.bottomRight];
+	
+	[self addSubview:self.predscriptionLabel];
 }
 
 - (void)updateConstraints {
@@ -54,6 +57,10 @@
 		make.right.bottom.equalTo(self).offset(-predscriptionViewCornerViewOffset);
 	}];
 	
+	[self.predscriptionLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+		make.center.equalTo(self);
+	}];
+	
 	[super updateConstraints];
 }
 
@@ -64,6 +71,42 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
+}
+
+#pragma mark - Prescription Label
+
+- (UILabel *)predscriptionLabel {
+	if (_predscriptionLabel)
+		return _predscriptionLabel;
+	
+	_predscriptionLabel = [[UILabel alloc]
+						   init];
+	_predscriptionLabel.text = self.predscription;
+	
+	return _predscriptionLabel;
+}
+
+- (void)showPredscriptionLabel:(BOOL)animated {
+	[self setPredscriptionAlpha:1.0f animated:animated];
+}
+
+- (void)hidePredscriptionLabel:(BOOL)animated {
+	[self setPredscriptionAlpha:.0f animated:animated];
+}
+
+- (void)setPredscriptionAlpha:(CGFloat)value animated:(BOOL)animated {
+	if (animated) {
+		abort();
+	} else {
+		self.predscriptionLabel.alpha = value;
+	}
+}
+
+#pragma mark - Predscription
+
+- (void)setPredscription:(NSString *)predscription {
+	NSAssert(!self.superview, @"You must set predsription string before moving to superview");
+	_predscription = predscription;
 }
 
 #pragma mark - Corner Views
