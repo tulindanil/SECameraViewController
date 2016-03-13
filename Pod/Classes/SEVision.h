@@ -14,7 +14,7 @@
 
 + (instancetype)sharedInstance;
 
-@property (nonatomic, weak, nullable) id<SEVisionDelegate> delegate;
+@property (nonatomic, weak) id<SEVisionDelegate> delegate;
 
 @property (nonatomic, readonly) AVCaptureVideoPreviewLayer *previewLayer;
 
