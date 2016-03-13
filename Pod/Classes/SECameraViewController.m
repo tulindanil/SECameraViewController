@@ -49,7 +49,7 @@
 	
 	[self.view addSubview:self.previewView];
 	[self.view addSubview:self.closeButton];
-	[self.view addSubview:self.buttonsContainer];
+//	[self.view addSubview:self.buttonsContainer];
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
@@ -73,21 +73,20 @@
 		}
 	}];
 	
-	[self.shutterView mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.shutterView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self.previewView);
 	}];
 	
-	[self.closeButton mas_updateConstraints:^(MASConstraintMaker *make) {
+	[self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
 		make.width.equalTo(self.view.mas_width);
 		make.bottom.equalTo(self.view.mas_bottom);
 		make.height.equalTo(@(50));
 	}];
 	
-	[self.buttonsContainer mas_updateConstraints:^(MASConstraintMaker *make) {
-		make.bottom.equalTo(self.closeButton.mas_top).offset(-8);
-		make.centerX.equalTo(self.view);
-	}];
-	
+//	[self.buttonsContainer mas_remakeConstraints:^(MASConstraintMaker *make) {
+//		make.bottom.equalTo(self.closeButton.mas_top).offset(-8);
+//		make.centerX.equalTo(self.view.mas_centerX);
+//	}];
 	[super updateViewConstraints];
 }
 
@@ -102,6 +101,12 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.appeared = YES;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(didChangeOrientation)
+												 name:UIDeviceOrientationDidChangeNotification
+											   object:nil];
+	[self didChangeOrientation];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -113,6 +118,32 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	[self.vision stopPreview];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:UIDeviceOrientationDidChangeNotification
+												  object:nil];
+}
+
+#pragma mark - Orientation
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (void)didChangeOrientation {
+	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+//	PBJVision *vision = self.vision;
+	
+	[UIView animateWithDuration:defaultAnimationDuration
+					 animations:^{
+		if (orientation == UIDeviceOrientationLandscapeLeft) {
+			[self bringCloseButtonToLandscape];
+		} else if (orientation == UIDeviceOrientationLandscapeRight) {
+			[self bringCloseButtonToLandscape];
+		} else if (orientation == UIDeviceOrientationPortrait) {
+			[self bringCloseButtonToPortrait];
+		}
+	}];
 }
 
 #pragma mark - CloseButton
@@ -132,20 +163,18 @@
 	return _closeButton;
 }
 
-- (void)didTapCloseButton:(id)sender {
-	[self dismissViewControllerAnimated:YES completion:nil];
+- (void)bringCloseButtonToPortrait {
+	[_closeButton setTitle:[NSLocalizedString(@"Close", nil) uppercaseString]
+				  forState:UIControlStateNormal];
 }
 
-- (void)dismissViewControllerAnimated:(BOOL)flag
-						   completion:(void (^)(void))completion {
-	if (self.shutterView.isOpen) {
-		[super dismissViewControllerAnimated:flag
-								  completion:completion];
-		[self.shutterView close];
-	} else {
-		[super dismissViewControllerAnimated:flag
-								  completion:completion];
-	}
+- (void)bringCloseButtonToLandscape {
+	[_closeButton setTitle:@"x"
+				  forState:UIControlStateNormal];
+}
+
+- (void)didTapCloseButton:(id)sender {
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - PreviewView
@@ -201,7 +230,7 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 		[self.delegate cameraViewController:self
 				didCaptureVideoSampleBuffer:sampleBuffer];
 	} else {
-		NSLog(@"SECameraViewController: no suitable delegate class for capturing sample data");
+		NSLog(@"SECameraViewController: no delegate class for capturing sample data");
 	}
 }
 
@@ -237,10 +266,6 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 		[_buttonsContainer addButton:self.lightButton];
 	}
 	
-	UIButton *oneMore = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
-	oneMore.backgroundColor = [UIColor redColor];
-//	[_buttonsContainer addButton:oneMore];
-	
 	return _buttonsContainer;
 }
 
@@ -258,8 +283,27 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 
 #pragma mark - UIViewController
 
+- (void)viewWillTransitionToSize:(CGSize)size
+	   withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator  {
+	[super viewWillTransitionToSize:size
+		  withTransitionCoordinator:coordinator];
+	
+}
+
 - (BOOL)prefersStatusBarHidden {
 	return YES;
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)flag
+						   completion:(void (^)(void))completion {
+	if (self.shutterView.isOpen) {
+		[super dismissViewControllerAnimated:flag
+								  completion:completion];
+		[self.shutterView close];
+	} else {
+		[super dismissViewControllerAnimated:flag
+								  completion:completion];
+	}
 }
 
 @end
