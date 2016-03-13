@@ -76,17 +76,49 @@
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
  didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	
+}
+
+- (void)cameraViewController:(SECameraViewController *)cameraViewController
+	didCaptureBGRASampleData:(u_int8_t *)bytes
+					   width:(NSUInteger)width
+					  height:(NSUInteger)height {
 	static dispatch_once_t predicate = 0;
 	dispatch_once(&predicate, ^(){
-		CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-		
-		CVPixelBufferLockBaseAddress(imageBuffer, 0);
-		
-		int width = (int)CVPixelBufferGetWidth(imageBuffer);
-		int height = (int)CVPixelBufferGetHeight(imageBuffer);
-		
-		NSLog(@"Width: %d, Height: %d", width, height);
+		NSLog(@"Width: %zu, Height: %zu", (unsigned long)width, (unsigned long)height);
 	});
+	
+	NSUInteger dataLength = width * height * 4;
+	
+	for (NSUInteger i = 0; i < dataLength; i += 4) {
+		char blueByte = bytes[i];
+		bytes[i] = bytes[i + 2]; // blue <- red
+		bytes[i + 2] = blueByte; // red  <- blue
+	} // BGRA -> RGBA
+	
+	NSData *data = [NSData dataWithBytes:bytes
+								  length:dataLength];
+	
+	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGImageRef imageRef = CGImageCreate(width, // Width
+										height, // Height
+										8, // Bits per component
+										32, // Bits per pixel
+										width * 4, // Bytes per row
+										colorSpace, // Colorspace
+										kCGImageAlphaLast |  kCGBitmapByteOrderDefault, // Bitmap info flags
+										provider, // CGDataProviderRef
+										NULL, // Decode
+										false, // Should interpolate
+										kCGRenderingIntentDefault); // Intent
+	
+	UIImage *ret = [UIImage imageWithCGImage:imageRef
+									   scale:1.0f
+								 orientation:UIImageOrientationDown];
+	
+	CGImageRelease(imageRef);
+	CGDataProviderRelease(provider);
+	CGColorSpaceRelease(colorSpace);
 }
 
 @end
