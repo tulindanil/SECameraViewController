@@ -63,7 +63,7 @@
 }
 
 - (void)stopPreview {
-	[self enqueueBlockInMainQueue:^{
+	[self enqueueBlockInVisionQueue:^{
 		[self.captureSession stopRunning];
 		[self executeBlockInMainQueue:^{
 			if ([self.delegate respondsToSelector:@selector(visionSessionDidStopPreview:)]) {
