@@ -21,6 +21,8 @@
 @property (nonatomic) dispatch_queue_t captureVideoQueue;
 @property (nonatomic) dispatch_queue_t visionQueue;
 
+@property (nonatomic) BOOL isInitialized;
+
 @end
 
 @implementation SEVision
@@ -40,7 +42,8 @@
 
 - (void)startPreview {
 	[self enqueueBlockInVisionQueue:^{
-		if (_captureSession == nil) {
+		if (!self.isInitialized) {
+			self.isInitialized = YES;
 			if ([self.captureSession canAddInput:self.rearCameraInput])
 				[self.captureSession addInput:self.rearCameraInput];
 			
