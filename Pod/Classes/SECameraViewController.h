@@ -32,6 +32,11 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
  didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
+- (void)cameraViewController:(SECameraViewController *)cameraViewController
+    didCaptureBGRASampleData:(u_int8_t *)data
+					   width:(NSUInteger)width
+					  height:(NSUInteger)height;
+
 @required
 
 @end
