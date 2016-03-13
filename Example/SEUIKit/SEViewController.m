@@ -8,7 +8,7 @@
 
 #import "SEViewController.h"
 
-@interface SEViewController ()
+@interface SEViewController () <SECameraViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *cameraButton;
 
@@ -63,11 +63,30 @@
 - (void)didTapCamera:(id)sender {
 	SECameraViewController *cameraViewController = [[SECameraViewController alloc]
 													init];
+	cameraViewController.delegate = self;
 	cameraViewController.outputFormat = SEOutputFormatSquare;
 	cameraViewController.flashEnabled = YES;
 	[self presentViewController:cameraViewController
 					   animated:YES
 					 completion:nil];
+}
+
+#pragma mark - SECameraViewConrtollerDelegate
+
+- (void)cameraViewController:(SECameraViewController *)cameraViewController
+ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+	
+	static dispatch_once_t predicate = 0;
+	dispatch_once(&predicate, ^(){
+		CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+		
+		CVPixelBufferLockBaseAddress(imageBuffer, 0);
+		
+		int width = (int)CVPixelBufferGetWidth(imageBuffer);
+		int height = (int)CVPixelBufferGetHeight(imageBuffer);
+		
+		NSLog(@"Width: %d, Height: %d", width, height);
+	});
 }
 
 @end
