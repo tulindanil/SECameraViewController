@@ -21,7 +21,7 @@
 @property (nonatomic) dispatch_queue_t captureVideoQueue;
 @property (nonatomic) dispatch_queue_t visionQueue;
 
-@property (nonatomic) BOOL isInitialized;
+@property (nonatomic) BOOL isConnectionsInitialized;
 
 @end
 
@@ -42,24 +42,28 @@
 
 - (void)startPreview {
 	[self enqueueBlockInVisionQueue:^{
-		if (!self.isInitialized) {
-			self.isInitialized = YES;
-			if ([self.captureSession canAddInput:self.rearCameraInput])
-				[self.captureSession addInput:self.rearCameraInput];
-			
-			if ([self.captureSession canAddOutput:self.captureVideoDataOutput] &&
-				[self.captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
-				[self.captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
-				[self.captureSession addOutput:self.captureVideoDataOutput];
-			}
+		if (!self.isConnectionsInitialized) {
+			[self initializeConnections];
 		}
 		
 		[self.captureSession startRunning];
 		[self enqueueBlockInMainQueue:^{
 			if ([self.delegate respondsToSelector:@selector(visionSessionDidStartPreview:)])
-				[self.delegate visionSessionDidStart:self];
+				[self.delegate visionSessionDidStartPreview:self];
 		}];
 	}];
+}
+
+- (void)initializeConnections {
+	self.isConnectionsInitialized = YES;
+	if ([self.captureSession canAddInput:self.rearCameraInput])
+		[self.captureSession addInput:self.rearCameraInput];
+	
+	if ([self.captureSession canAddOutput:self.captureVideoDataOutput] &&
+		[self.captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
+		[self.captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
+		[self.captureSession addOutput:self.captureVideoDataOutput];
+	}
 }
 
 - (void)stopPreview {
