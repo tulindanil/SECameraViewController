@@ -45,6 +45,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	
+	
 	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
 	
 	[self.view addSubview:self.previewView];
@@ -111,8 +113,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	
-	RUN_IF_SIMULATOR([self visionDidStartVideoCapture:self.vision];)
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -134,14 +134,15 @@
 	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
 //	SEVision *vision = self.vision;
 	
-	[UIView animateWithDuration:defaultAnimationDuration
-					 animations:^{
+	[UIView animateWithDuration:defaultAnimationDuration animations:^{
+		[self.previewView rotatePredscriptionLabelForOrientation:orientation];
+//		AVCaptureConnection *connection = self.vision.previewLayer.connection;
 		if (orientation == UIDeviceOrientationLandscapeLeft) {
-			[self bringCloseButtonToLandscape];
+			
 		} else if (orientation == UIDeviceOrientationLandscapeRight) {
-			[self bringCloseButtonToLandscape];
+			
 		} else if (orientation == UIDeviceOrientationPortrait) {
-			[self bringCloseButtonToPortrait];
+			
 		}
 	}];
 }
@@ -185,6 +186,7 @@
 	
 	_previewView = [[SEPreviewView alloc] init];
 	_previewView.backgroundColor = [UIColor blackColor];
+	_previewView.predscription = @"PLACE";
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
 	previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -205,31 +207,43 @@
 	_vision = [SEVision sharedInstance];
 	_vision.delegate = self;
 	
-//	_vision.cameraMode = SECameraModeVideo;
-//	_vision.cameraOrientation = SECameraOrientationPortrait;
-//	_vision.focusMode = SEFocusModeContinuousAutoFocus;
-//	
-//	_vision.outputFormat = SEOutputFormatSquare;
-	
 	return _vision;
 }
 
 #pragma mark - Vision Delegate
 
-- (void)visionSessionDidStart:(SEVision *)vision {
-	
-}
-
-- (void)visionDidStartVideoCapture:(SEVision *)vision {
-	[self.shutterView open];
+- (void)visionSessionDidStartPreview:(SEVision *)vision {
+	[self.shutterView openWithCompletion:^{
+		[self.previewView showPredscriptionLabel:YES];
+	}];
 }
 
 - (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+	BOOL didSendData = NO;
+	
 	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
 		[self.delegate cameraViewController:self
 				didCaptureVideoSampleBuffer:sampleBuffer];
-	} else {
+		didSendData = YES;
+	}
+	
+	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureBGRASampleData:width:height:)]) {
+		CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
+		
+		CVPixelBufferLockBaseAddress(imageBufferRef, 0);
+		uint8_t *data = (uint8_t *)CVPixelBufferGetBaseAddress(imageBufferRef);
+		
+		NSUInteger width = (NSUInteger)CVPixelBufferGetWidth(imageBufferRef);
+		NSUInteger height = (NSUInteger)CVPixelBufferGetHeight(imageBufferRef);
+		[self.delegate cameraViewController:self
+				   didCaptureBGRASampleData:data
+									  width:width
+									 height:height];
+		didSendData = YES;
+	}
+	
+	if (didSendData == NO) {
 		NSLog(@"SECameraViewController: no delegate class for capturing sample data");
 	}
 }
@@ -292,18 +306,6 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 
 - (BOOL)prefersStatusBarHidden {
 	return YES;
-}
-
-- (void)dismissViewControllerAnimated:(BOOL)flag
-						   completion:(void (^)(void))completion {
-	if (self.shutterView.isOpen) {
-		[super dismissViewControllerAnimated:flag
-								  completion:completion];
-		[self.shutterView close];
-	} else {
-		[super dismissViewControllerAnimated:flag
-								  completion:completion];
-	}
 }
 
 @end
