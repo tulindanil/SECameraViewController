@@ -15,4 +15,6 @@
 - (void)showPredscriptionLabel:(BOOL)animated;
 - (void)hidePredscriptionLabel:(BOOL)animated;
 
+- (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation;
+
 @end

@@ -82,6 +82,9 @@
 	_predscriptionLabel = [[UILabel alloc]
 						   init];
 	_predscriptionLabel.text = self.predscription;
+	_predscriptionLabel.textColor = [UIColor whiteColor];
+	_predscriptionLabel.alpha = .0f;
+	_predscriptionLabel.font = [UIFont systemFontOfSize:32.0f];
 	
 	return _predscriptionLabel;
 }
@@ -96,7 +99,10 @@
 
 - (void)setPredscriptionAlpha:(CGFloat)value animated:(BOOL)animated {
 	if (animated) {
-		abort();
+		[UIView animateWithDuration:defaultAnimationDuration
+						 animations:^{
+							 self.predscriptionLabel.alpha = value;
+						 }];
 	} else {
 		self.predscriptionLabel.alpha = value;
 	}
@@ -107,6 +113,24 @@
 - (void)setPredscription:(NSString *)predscription {
 	NSAssert(!self.superview, @"You must set predsription string before moving to superview");
 	_predscription = predscription;
+}
+
+#pragma mark - orientation
+
+- (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation {
+	switch (orientation) {
+		case UIDeviceOrientationPortrait:
+			self.predscriptionLabel.transform = CGAffineTransformMakeRotation(0);
+			break;
+		case UIDeviceOrientationLandscapeLeft:
+			self.predscriptionLabel.transform = CGAffineTransformMakeRotation(.5f * M_PI);
+			break;
+		case UIDeviceOrientationLandscapeRight:
+			self.predscriptionLabel.transform = CGAffineTransformMakeRotation(-.5f * M_PI);
+			break;
+		default:
+			break;
+	}
 }
 
 #pragma mark - Corner Views
