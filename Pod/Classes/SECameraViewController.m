@@ -8,20 +8,20 @@
 
 #import "SECameraViewController.h"
 
-#import <PBJVision/PBJVision.h>
+#import "SEVision.h"
 
 #import "SEPreviewView.h"
 #import "SEShutterView.h"
 #import "SERoundButtonsContainer.h"
 
-@interface SECameraViewController () <PBJVisionDelegate>
+@interface SECameraViewController () <SEVisionDelegate>
 
 @property (nonatomic, strong) SEPreviewView *previewView;
 @property (nonatomic, strong) SEShutterView *shutterView;
 
 @property (nonatomic, strong) UIButton *closeButton;
 
-@property (nonatomic, strong) PBJVision *vision;
+@property (nonatomic, strong) SEVision *vision;
 
 @property (nonatomic, getter=isAppeared) BOOL appeared;
 
@@ -132,7 +132,7 @@
 
 - (void)didChangeOrientation {
 	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-//	PBJVision *vision = self.vision;
+//	SEVision *vision = self.vision;
 	
 	[UIView animateWithDuration:defaultAnimationDuration
 					 animations:^{
@@ -198,33 +198,33 @@
 
 #pragma mark - Vision
 
-- (PBJVision *)vision {
+- (SEVision *)vision {
 	if (_vision)
 		return _vision;
 	
-	_vision = [PBJVision sharedInstance];
+	_vision = [SEVision sharedInstance];
 	_vision.delegate = self;
 	
-	_vision.cameraMode = PBJCameraModeVideo;
-	_vision.cameraOrientation = PBJCameraOrientationPortrait;
-	_vision.focusMode = PBJFocusModeContinuousAutoFocus;
-	
-	_vision.outputFormat = PBJOutputFormatSquare;
+//	_vision.cameraMode = SECameraModeVideo;
+//	_vision.cameraOrientation = SECameraOrientationPortrait;
+//	_vision.focusMode = SEFocusModeContinuousAutoFocus;
+//	
+//	_vision.outputFormat = SEOutputFormatSquare;
 	
 	return _vision;
 }
 
 #pragma mark - Vision Delegate
 
-- (void)visionSessionDidStart:(PBJVision *)vision {
-	[self.vision startVideoCapture];
+- (void)visionSessionDidStart:(SEVision *)vision {
+	
 }
 
-- (void)visionDidStartVideoCapture:(PBJVision *)vision {
+- (void)visionDidStartVideoCapture:(SEVision *)vision {
 	[self.shutterView open];
 }
 
-- (void)vision:(PBJVision *)vision
+- (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
 		[self.delegate cameraViewController:self
@@ -236,15 +236,15 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 
 #pragma mark - OutputFormat
 
-- (void)setOutputFormat:(SEOutputFormat)outputFormat {
-	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
-	_outputFormat = outputFormat;
-	if (_outputFormat == SEOutputFormatSquare) {
-		self.vision.outputFormat = PBJOutputFormatSquare;
-	} else if (_outputFormat == SEOutputFormatWidescreen) {
-		self.vision.outputFormat = PBJOutputFormatWidescreen;
-	}
-}
+//- (void)setOutputFormat:(SEOutputFormat)outputFormat {
+//	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
+//	_outputFormat = outputFormat;
+//	if (_outputFormat == SEOutputFormatSquare) {
+//		self.vision.outputFormat = SEOutputFormatSquare;
+//	} else if (_outputFormat == SEOutputFormatWidescreen) {
+//		self.vision.outputFormat = SEOutputFormatWidescreen;
+//	}
+//}
 
 #pragma mark - Flash Enabled
 
