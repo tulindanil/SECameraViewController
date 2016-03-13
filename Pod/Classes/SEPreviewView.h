@@ -10,6 +10,11 @@
 
 @interface SEPreviewView : UIView
 
+@property (nonatomic) NSString *predscription;
 
+- (void)showPredscriptionLabel:(BOOL)animated;
+- (void)hidePredscriptionLabel:(BOOL)animated;
+
+- (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation;
 
 @end

@@ -31,6 +31,18 @@
 	[super updateConstraints];
 }
 
+- (void)showPredscriptionLabel:(BOOL)animated {
+	[self.predscriptionView showPredscriptionLabel:animated];
+}
+
+- (void)hidePredscriptionLabel:(BOOL)animated {
+	[self.predscriptionView hidePredscriptionLabel:animated];
+}
+
+- (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation {
+	[self.predscriptionView rotatePredscriptionLabelForOrientation:orientation];
+}
+
 #pragma mark - Predscription View
 
 - (SEPredscriptionView *)predscriptionView {
@@ -38,6 +50,7 @@
 		return _predscriptionView;
 	
 	_predscriptionView = [[SEPredscriptionView alloc] init];
+	_predscriptionView.predscription = self.predscription;
 	return _predscriptionView;
 }
 
