@@ -47,8 +47,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	
-	
 	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
 	
 	[self.view addSubview:self.previewView];
@@ -119,6 +117,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	[self.vision stopPreview];
+	[self.engine stopSession];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:UIDeviceOrientationDidChangeNotification
@@ -212,6 +211,7 @@
 - (void)visionSessionDidStartPreview:(SEVision *)vision {
 	[self.shutterView openWithCompletion:^{
 		[self.previewView showPredscriptionLabel:YES];
+		[self.engine startSession];
 	}];
 }
 
