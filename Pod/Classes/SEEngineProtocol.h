@@ -19,4 +19,7 @@
 @property (nonatomic) float progress;
 @property (nonatomic) BOOL isAbleToProcess;
 
+- (void)startSession;
+- (void)stopSession;
+
 @end
