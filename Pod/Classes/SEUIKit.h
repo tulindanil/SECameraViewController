@@ -8,6 +8,7 @@
 
 #import <SEUIKit/Constants.h>
 #import <SEUIKit/SECameraViewController.h>
+#import <SEUIKit/SEEngineProtocol.h>
 
 #import <Masonry/Masonry.h>
 #import <MPColorTools/MPColorTools.h>
