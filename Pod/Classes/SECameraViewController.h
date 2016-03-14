@@ -14,6 +14,16 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 	SEOutputFormatWidescreen, // 16:9
 };
 
+@protocol EngineProtocol <NSObject>
+
+- (void)feedBGRAImageData:(u_int8_t *)data
+					width:(NSUInteger)width
+				  heieght:(NSUInteger)height;
+
+@property (nonatomic) CGFloat progress;
+
+@end
+
 @protocol SECameraViewControllerDelegate;
 @interface SECameraViewController : UIViewController
 
@@ -22,6 +32,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 @property (nonatomic) SEOutputFormat outputFormat;
 @property (nonatomic, getter=isFlashEnabled) BOOL flashEnabled;
+
+@property (nonatomic, weak) id<EngineProtocol> engine;
 
 @end
 
