@@ -17,6 +17,6 @@
 				   height:(NSUInteger)height;
 
 @property (nonatomic) float progress;
-@property (nonatomic) BOOL isReady;
+@property (nonatomic) BOOL isAbleToProcess;
 
 @end
