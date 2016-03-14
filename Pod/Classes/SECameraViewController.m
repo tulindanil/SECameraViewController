@@ -217,31 +217,23 @@
 
 - (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-	BOOL didSendData = NO;
+	CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
 	
-	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
-		[self.delegate cameraViewController:self
-				didCaptureVideoSampleBuffer:sampleBuffer];
-		didSendData = YES;
-	}
+	CVPixelBufferLockBaseAddress(imageBufferRef, 0);
+	uint8_t *data = (uint8_t *)CVPixelBufferGetBaseAddress(imageBufferRef);
+	
+	NSUInteger width = (NSUInteger)CVPixelBufferGetWidth(imageBufferRef);
+	NSUInteger height = (NSUInteger)CVPixelBufferGetHeight(imageBufferRef);
+	
+	[self.engine feedBGRAImageData:data
+							 width:width
+							height:height];
 	
 	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureBGRASampleData:width:height:)]) {
-		CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
-		
-		CVPixelBufferLockBaseAddress(imageBufferRef, 0);
-		uint8_t *data = (uint8_t *)CVPixelBufferGetBaseAddress(imageBufferRef);
-		
-		NSUInteger width = (NSUInteger)CVPixelBufferGetWidth(imageBufferRef);
-		NSUInteger height = (NSUInteger)CVPixelBufferGetHeight(imageBufferRef);
 		[self.delegate cameraViewController:self
 				   didCaptureBGRASampleData:data
 									  width:width
 									 height:height];
-		didSendData = YES;
-	}
-	
-	if (didSendData == NO) {
-		NSLog(@"SECameraViewController: no delegate class for capturing sample data");
 	}
 }
 
@@ -298,7 +290,6 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	   withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator  {
 	[super viewWillTransitionToSize:size
 		  withTransitionCoordinator:coordinator];
-	
 }
 
 - (BOOL)prefersStatusBarHidden {
