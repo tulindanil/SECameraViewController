@@ -9,20 +9,12 @@
 @import UIKit;
 @import AVFoundation;
 
+#import "SEEngineProtocol.h"
+
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
 	SEOutputFormatSquare, // 1:1
 	SEOutputFormatWidescreen, // 16:9
 };
-
-@protocol EngineProtocol <NSObject>
-
-- (void)feedBGRAImageData:(u_int8_t *)data
-					width:(NSUInteger)width
-				  heieght:(NSUInteger)height;
-
-@property (nonatomic) CGFloat progress;
-
-@end
 
 @protocol SECameraViewControllerDelegate;
 @interface SECameraViewController : UIViewController
