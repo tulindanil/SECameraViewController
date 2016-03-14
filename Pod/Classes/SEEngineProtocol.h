@@ -14,7 +14,7 @@
 
 - (void)feedBGRAImageData:(u_int8_t *)data
 					width:(NSUInteger)width
-				  heieght:(NSUInteger)height;
+				   height:(NSUInteger)height;
 
 @property (nonatomic) float progress;
 
