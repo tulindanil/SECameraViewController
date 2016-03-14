@@ -6,6 +6,8 @@
 //
 //
 
+@import Foundation;
+
 @protocol EngineProtocol <NSObject>
 
 - (void)feedBGRAImageData:(u_int8_t *)data
