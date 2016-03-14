@@ -29,6 +29,8 @@
 
 @property (nonatomic, strong) UIButton *lightButton;
 
+@property (nonatomic) UIDeviceOrientation orientation;
+
 @end
 
 @implementation SECameraViewController
@@ -51,7 +53,6 @@
 	
 	[self.view addSubview:self.previewView];
 	[self.view addSubview:self.closeButton];
-//	[self.view addSubview:self.buttonsContainer];
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
@@ -130,20 +131,16 @@
 	return UIInterfaceOrientationMaskPortrait;
 }
 
+- (UIDeviceOrientation)orientation {
+	UIDevice *device = [UIDevice currentDevice];
+	return device.orientation;
+}
+
 - (void)didChangeOrientation {
-	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-//	SEVision *vision = self.vision;
+	UIDeviceOrientation orientation = self.orientation;
 	
 	[UIView animateWithDuration:defaultAnimationDuration animations:^{
 		[self.previewView rotatePredscriptionLabelForOrientation:orientation];
-//		AVCaptureConnection *connection = self.vision.previewLayer.connection;
-		if (orientation == UIDeviceOrientationLandscapeLeft) {
-			
-		} else if (orientation == UIDeviceOrientationLandscapeRight) {
-			
-		} else if (orientation == UIDeviceOrientationPortrait) {
-			
-		}
 	}];
 }
 
