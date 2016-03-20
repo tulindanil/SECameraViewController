@@ -12,7 +12,7 @@
 
 @required
 
-- (void)feedBGRAImageData:(u_int8_t *)data
+- (void)feedBGRAImageData:(const u_int8_t *)data
 					width:(NSUInteger)width
 				   height:(NSUInteger)height;
 
