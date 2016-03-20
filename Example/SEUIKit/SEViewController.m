@@ -98,6 +98,12 @@
 	NSData *data = [NSData dataWithBytes:bytes
 								  length:dataLength];
 	
+	
+}
+
+- (UIImage *)createImageFromRGBAData:(NSData *)data
+							   width:(NSUInteger)width
+							  height:(NSUInteger)height {
 	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGImageRef imageRef = CGImageCreate(width, // Width
@@ -119,6 +125,8 @@
 	CGImageRelease(imageRef);
 	CGDataProviderRelease(provider);
 	CGColorSpaceRelease(colorSpace);
+	
+	return ret;
 }
 
 @end
