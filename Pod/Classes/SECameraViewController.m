@@ -160,18 +160,12 @@
 	return _closeButton;
 }
 
-- (void)bringCloseButtonToPortrait {
-	[_closeButton setTitle:[NSLocalizedString(@"Close", nil) uppercaseString]
-				  forState:UIControlStateNormal];
-}
-
-- (void)bringCloseButtonToLandscape {
-	[_closeButton setTitle:@"x"
-				  forState:UIControlStateNormal];
-}
-
 - (void)didTapCloseButton:(id)sender {
-	[self dismissViewControllerAnimated:YES completion:nil];
+	[self dismissViewControllerAnimated:YES completion:^{
+		if ([self.delegate respondsToSelector:@selector(cameraViewControllerDidTapCloseButton:)]) {
+			[self.delegate cameraViewControllerDidTapCloseButton:self];
+		}
+	}];
 }
 
 #pragma mark - PreviewView

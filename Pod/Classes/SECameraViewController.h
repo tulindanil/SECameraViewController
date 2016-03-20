@@ -33,6 +33,9 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 @optional
 
+- (void)cameraViewControllerDidTapCloseButton:
+	(SECameraViewController *)cameraViewController;
+
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
  didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
