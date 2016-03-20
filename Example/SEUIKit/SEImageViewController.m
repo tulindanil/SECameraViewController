@@ -40,11 +40,33 @@
 	
 	[self.view addSubview:self.scrollView];
 	[self.scrollView addSubview:self.imageView];
+	
+	UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
+									initWithBarButtonSystemItem:(UIBarButtonSystemItemDone)
+									target:self
+									action:@selector(didTapCloseButton)];
+	self.navigationItem.rightBarButtonItem = closeButton;
+	[self.view setNeedsUpdateConstraints];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Close Button Handler
+
+- (void)didTapCloseButton {
+	[self dismissViewControllerAnimated:YES
+							 completion:nil];
 }
 
 #pragma mark - Scroll View
@@ -55,7 +77,7 @@
 	}
 	
 	_scrollView = [[UIScrollView alloc] init];
-	_scrollView.contentSize = self.imageView.frame.size;
+	_scrollView.contentSize = self.imageView.bounds.size;
 	
 	return _scrollView;
 }
@@ -69,7 +91,7 @@
 	
 	_imageView = [[UIImageView alloc]
 				  initWithImage:self.image];
-	CGRect bounds;
+	CGRect bounds = CGRectZero;
 	bounds.size = self.image.size;
 	_imageView.bounds = bounds;
 	
