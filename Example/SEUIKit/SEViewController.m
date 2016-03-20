@@ -7,10 +7,12 @@
 //
 
 #import "SEViewController.h"
+#import "SEImageViewController.h"
 
 @interface SEViewController () <SECameraViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *cameraButton;
+@property (nonatomic) UIImage *lastCapturedImage;
 
 @end
 
@@ -73,6 +75,16 @@
 
 #pragma mark - SECameraViewConrtollerDelegate
 
+- (void)cameraViewControllerDidTapCloseButton:(SECameraViewController *)cameraViewController {
+	SEImageViewController *imageVC = [[SEImageViewController alloc]
+									  initWithImage:self.lastCapturedImage];
+	UINavigationController *navigationController = [[UINavigationController alloc]
+													initWithRootViewController:imageVC];
+	[self presentViewController:navigationController
+					   animated:YES
+					 completion:nil];
+}
+
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
  didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	
@@ -97,8 +109,9 @@
 	
 	NSData *data = [NSData dataWithBytes:bytes
 								  length:dataLength];
-	
-	
+	self.lastCapturedImage = [self createImageFromRGBAData:data
+													 width:width
+													height:height];
 }
 
 - (UIImage *)createImageFromRGBAData:(NSData *)data
