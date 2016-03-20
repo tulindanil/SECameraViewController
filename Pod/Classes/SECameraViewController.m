@@ -229,6 +229,11 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 									  width:width
 									 height:height];
 	}
+	
+	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
+		[self.delegate cameraViewController:self
+				didCaptureVideoSampleBuffer:sampleBuffer];
+	}
 }
 
 #pragma mark - OutputFormat
