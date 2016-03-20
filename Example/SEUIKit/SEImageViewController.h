@@ -10,4 +10,6 @@
 
 @interface SEImageViewController : UIViewController
 
+- (instancetype)initWithImage:(UIImage *)image;
+
 @end
