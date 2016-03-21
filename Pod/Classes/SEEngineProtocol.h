@@ -28,6 +28,6 @@
 typedef struct {
 	CGPoint topLeft;
 	CGPoint topRight;
-	CGPoint bottomLeft;
 	CGPoint bottomRight;
+	CGPoint bottomLeft;
 } SEShape;
