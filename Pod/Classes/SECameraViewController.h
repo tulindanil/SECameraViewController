@@ -11,13 +11,6 @@
 
 #import "SEEngineProtocol.h"
 
-typedef struct {
-	CGPoint topLeft;
-	CGPoint topRight;
-	CGPoint bottomLeft;
-	CGPoint bottomRight;
-} SEShape;
-
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
 	SEOutputFormatSquare, // 1:1
 	SEOutputFormatWidescreen, // 16:9
