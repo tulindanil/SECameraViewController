@@ -126,6 +126,24 @@
 												  object:nil];
 }
 
+#pragma mark - Draw Shape
+
+- (void)drawShape:(SEShape)shape {
+	UIBezierPath *path = [UIBezierPath bezierPath];
+	[path moveToPoint:shape.topLeft];
+	[path addLineToPoint:shape.topRight];
+	[path addLineToPoint:shape.bottomRight];
+	[path addLineToPoint:shape.bottomLeft];
+	[path addLineToPoint:shape.topLeft];
+	[path addLineToPoint:shape.topRight];
+	CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+	shapeLayer.path = [path CGPath];
+	shapeLayer.strokeColor = [[UIColor whiteColor] CGColor];
+	shapeLayer.lineWidth = 1.5f;
+	shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+	[self.view.layer addSublayer:shapeLayer];
+}
+
 #pragma mark - Orientation
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {

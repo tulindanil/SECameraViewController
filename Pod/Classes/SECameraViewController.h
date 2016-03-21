@@ -11,6 +11,13 @@
 
 #import "SEEngineProtocol.h"
 
+typedef struct {
+	CGPoint topLeft;
+	CGPoint topRight;
+	CGPoint bottomLeft;
+	CGPoint bottomRight;
+} SEShape;
+
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
 	SEOutputFormatSquare, // 1:1
 	SEOutputFormatWidescreen, // 16:9
@@ -26,6 +33,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 @property (nonatomic, getter=isFlashEnabled) BOOL flashEnabled;
 
 @property (nonatomic, weak) id<EngineProtocol> engine;
+
+- (void)drawShape:(SEShape)shape;
 
 @end
 
