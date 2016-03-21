@@ -221,9 +221,8 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	NSData *data = [self rotateBuffer:imageBufferRef
 								width:&width
 							   height:&height];
-	const u_int8_t *bytes = data.bytes;
 	
-	[self.engine feedBGRAImageData:bytes
+	[self.engine feedBGRAImageData:data
 							 width:width
 							height:height];
 	
@@ -232,7 +231,7 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 													width:
 													height:)]) {
 		[self.delegate cameraViewController:self
-				   didCaptureBGRASampleData:bytes
+				   didCaptureBGRASampleData:data
 									  width:width
 									 height:height];
 	}

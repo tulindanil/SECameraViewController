@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
  didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
-    didCaptureBGRASampleData:(const u_int8_t *)data
+    didCaptureBGRASampleData:(NSData *)data
 					   width:(NSUInteger)width
 					  height:(NSUInteger)height;
 

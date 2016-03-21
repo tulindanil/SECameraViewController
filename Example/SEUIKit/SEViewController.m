@@ -91,7 +91,7 @@
 }
 
 - (void)cameraViewController:(SECameraViewController *)cameraViewController
-	didCaptureBGRASampleData:(const u_int8_t *)bytes
+	didCaptureBGRASampleData:(NSData *)data
 					   width:(NSUInteger)width
 					  height:(NSUInteger)height {
 	static dispatch_once_t predicate = 0;
@@ -100,11 +100,9 @@
 	});
 	
 	NSUInteger dataLength = width * height * 4;
+	NSMutableData *mutableData = [NSMutableData dataWithData:data];
 	
-	NSMutableData *data = [NSMutableData dataWithBytes:bytes
-												length:dataLength];
-	
-	char *mutableBytes = data.mutableBytes;
+	char *mutableBytes = mutableData.mutableBytes;
 	
 	for (NSUInteger i = 0; i < dataLength; i += 4) {
 		char blueByte = mutableBytes[i];
@@ -112,7 +110,7 @@
 		mutableBytes[i + 2] = blueByte;        // red <- blue
 	} // BGRA -> RGBA
 
-	self.lastCapturedImage = [self createImageFromRGBAData:data
+	self.lastCapturedImage = [self createImageFromRGBAData:mutableData
 													 width:width
 													height:height];
 }
