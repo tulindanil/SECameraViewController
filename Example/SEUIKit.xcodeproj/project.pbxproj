@@ -255,9 +255,6 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = tulindanil;
 				TargetAttributes = {
-					6003F589195388D20070C39A = {
-						DevelopmentTeam = WWNR4RF9QW;
-					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
