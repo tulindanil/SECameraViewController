@@ -79,6 +79,8 @@
 	cameraViewController.delegate = self;
 	cameraViewController.outputFormat = SEOutputFormatWidescreen;
 	cameraViewController.flashEnabled = YES;
+	SEShape shape;
+	[cameraViewController drawShape:shape];
 	[self presentViewController:cameraViewController
 					   animated:YES
 					 completion:nil];
