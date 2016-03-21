@@ -14,13 +14,14 @@
 @property (nonatomic, strong) UIButton *cameraButton;
 @property (nonatomic) UIImage *lastCapturedImage;
 
+@property (nonatomic) UISwitch *imageShowSwitch;
+
 @end
 
 @implementation SEViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.view.backgroundColor = [UIColor whiteColor];
 	
 	UINavigationBar *navigationBar = self.navigationController.navigationBar;
 	
@@ -36,14 +37,24 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self.view addSubview:self.cameraButton];
+	[self.view addSubview:self.imageShowSwitch];
 }
 
 - (void)updateViewConstraints {
-	[super updateViewConstraints];
-	
 	[self.cameraButton mas_updateConstraints:^(MASConstraintMaker *make) {
 		make.center.equalTo(self.view);
 	}];
+	
+	[self.imageShowSwitch mas_remakeConstraints:^(MASConstraintMaker *make) {
+		make.centerX.equalTo(self.view);
+		make.top.equalTo(self.cameraButton.mas_bottom).offset(8);
+	}];
+	
+	[super updateViewConstraints];
+}
+
+- (void)viewDidLayoutSubviews {
+	[super viewDidLayoutSubviews];
 }
 
 #pragma mark - Camera Button
@@ -76,6 +87,9 @@
 #pragma mark - SECameraViewConrtollerDelegate
 
 - (void)cameraViewControllerDidTapCloseButton:(SECameraViewController *)cameraViewController {
+	if (!self.imageShowSwitch.isOn)
+		return;
+	
 	SEImageViewController *imageVC = [[SEImageViewController alloc]
 									  initWithImage:self.lastCapturedImage];
 	UINavigationController *navigationController = [[UINavigationController alloc]
@@ -141,6 +155,19 @@
 	CGColorSpaceRelease(colorSpace);
 	
 	return ret;
+}
+
+#pragma mark - Image Show Switcher
+
+- (UISwitch *)imageShowSwitch {
+	if (_imageShowSwitch) {
+		return _imageShowSwitch;
+	}
+	
+	_imageShowSwitch = [[UISwitch alloc] init];
+	[_imageShowSwitch sizeToFit];
+	
+	return _imageShowSwitch;
 }
 
 @end
