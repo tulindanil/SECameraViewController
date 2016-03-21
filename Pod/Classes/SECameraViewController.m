@@ -116,6 +116,11 @@
 	[super viewDidAppear:animated];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[self.shutterView close];
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	[self.vision stopPreview];
