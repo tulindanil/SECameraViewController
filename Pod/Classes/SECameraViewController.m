@@ -146,7 +146,7 @@
 	shapeLayer.strokeColor = [[UIColor whiteColor] CGColor];
 	shapeLayer.lineWidth = 1.5f;
 	shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-	[self.view.layer addSublayer:shapeLayer];
+	[self.previewView.layer addSublayer:shapeLayer];
 }
 
 #pragma mark - Orientation
