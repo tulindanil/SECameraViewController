@@ -36,7 +36,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	self.navigationController.navigationBar.translucent = NO;
+	UINavigationBar *navigationBar = self.navigationController.navigationBar;
+	
+	navigationBar.barStyle = UIStatusBarStyleLightContent;
+	navigationBar.translucent = NO;
+	navigationBar.barTintColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+	
+	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
 	
 	[self.view addSubview:self.scrollView];
 	[self.scrollView addSubview:self.imageView];
@@ -45,6 +51,7 @@
 									initWithBarButtonSystemItem:(UIBarButtonSystemItemDone)
 									target:self
 									action:@selector(didTapCloseButton)];
+	closeButton.tintColor = [UIColor whiteColor];
 	self.navigationItem.rightBarButtonItem = closeButton;
 	[self.view setNeedsUpdateConstraints];
 }
