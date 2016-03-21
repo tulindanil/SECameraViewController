@@ -6,6 +6,8 @@
 //
 //
 
+#import <Accelerate/Accelerate.h>
+
 #import "SECameraViewController.h"
 
 #import "SEVision.h"
@@ -212,28 +214,93 @@
 - (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 	CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
-	
 	CVPixelBufferLockBaseAddress(imageBufferRef, 0);
-	uint8_t *data = (uint8_t *)CVPixelBufferGetBaseAddress(imageBufferRef);
 	
-	NSUInteger width = (NSUInteger)CVPixelBufferGetWidth(imageBufferRef);
-	NSUInteger height = (NSUInteger)CVPixelBufferGetHeight(imageBufferRef);
+	NSUInteger width = 0, height = 0;
 	
-	[self.engine feedBGRAImageData:data
+	NSData *data = [self rotateBuffer:imageBufferRef
+								width:&width
+							   height:&height];
+	const u_int8_t *bytes = data.bytes;
+	
+	[self.engine feedBGRAImageData:bytes
 							 width:width
 							height:height];
 	
-	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureBGRASampleData:width:height:)]) {
+	if ([self.delegate respondsToSelector:@selector(cameraViewController:
+													didCaptureBGRASampleData:
+													width:
+													height:)]) {
 		[self.delegate cameraViewController:self
-				   didCaptureBGRASampleData:data
+				   didCaptureBGRASampleData:bytes
 									  width:width
 									 height:height];
 	}
 	
-	if ([self.delegate respondsToSelector:@selector(cameraViewController:didCaptureVideoSampleBuffer:)]) {
+	if ([self.delegate respondsToSelector:@selector(cameraViewController:
+													didCaptureVideoSampleBuffer:)]) {
 		[self.delegate cameraViewController:self
 				didCaptureVideoSampleBuffer:sampleBuffer];
 	}
+}
+
+- (NSData *)rotateBuffer:(const CVImageBufferRef)imageBufferRef
+				   width:(NSUInteger *)width
+				  height:(NSUInteger *)height {
+	*width = CVPixelBufferGetWidth(imageBufferRef);
+	*height = CVPixelBufferGetHeight(imageBufferRef);
+	size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBufferRef);
+	size_t currSize = bytesPerRow * *height;
+	size_t bytesPerRowOut = bytesPerRow;
+
+	void *srcBuff = CVPixelBufferGetBaseAddress(imageBufferRef);
+	
+	NSUInteger rotationConstant = [self getOrientationConstant];
+	unsigned char *outBuff = (unsigned char*)malloc(currSize);
+	
+	vImage_Buffer ibuff = {srcBuff, *height, *width, bytesPerRow};
+
+	if (rotationConstant % 2 != 0) {
+		NSUInteger tmp = *width;
+		*width = *height;
+		*height = tmp;
+		bytesPerRowOut = 4 * *width;
+	}
+	
+	vImage_Buffer ubuff = {outBuff, *height, *width, bytesPerRowOut};
+	
+	Pixel_8888 backColor = {0, 0, 0, 0};
+	vImage_Error err = vImageRotate90_ARGB8888(&ibuff,
+											   &ubuff,
+											   rotationConstant,
+											   backColor,
+											   0);
+	if (err != kvImageNoError)
+		NSLog(@"%ld", err);
+
+	return [NSData dataWithBytesNoCopy:outBuff
+								length:currSize
+								freeWhenDone:YES];
+}
+
+- (NSUInteger)getOrientationConstant {
+	switch (self.orientation) {
+		case UIDeviceOrientationPortrait:
+			return 3;
+			break;
+		case UIDeviceOrientationLandscapeRight:
+			return 2;
+			break;
+		case UIDeviceOrientationPortraitUpsideDown:
+			return 1;
+			break;
+		case UIDeviceOrientationLandscapeLeft:
+			return 0;
+			break;
+  		default:
+			break;
+	}
+	return 0;
 }
 
 #pragma mark - OutputFormat
