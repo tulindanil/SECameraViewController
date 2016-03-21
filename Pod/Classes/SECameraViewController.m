@@ -304,15 +304,10 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 
 #pragma mark - OutputFormat
 
-//- (void)setOutputFormat:(SEOutputFormat)outputFormat {
-//	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
-//	_outputFormat = outputFormat;
-//	if (_outputFormat == SEOutputFormatSquare) {
-//		self.vision.outputFormat = SEOutputFormatSquare;
-//	} else if (_outputFormat == SEOutputFormatWidescreen) {
-//		self.vision.outputFormat = SEOutputFormatWidescreen;
-//	}
-//}
+- (void)setOutputFormat:(SEOutputFormat)outputFormat {
+	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
+	_outputFormat = outputFormat;
+}
 
 #pragma mark - Flash Enabled
 
