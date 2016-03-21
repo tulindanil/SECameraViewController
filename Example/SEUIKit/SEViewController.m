@@ -136,7 +136,7 @@
 	
 	UIImage *ret = [UIImage imageWithCGImage:imageRef
 									   scale:1.0f
-								 orientation:UIImageOrientationDown];
+								 orientation:UIImageOrientationUp];
 	
 	CGImageRelease(imageRef);
 	CGDataProviderRelease(provider);
