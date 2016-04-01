@@ -14,6 +14,8 @@
 
 @property (nonatomic, readwrite) SEPredscriptionView *predscriptionView;
 
+@property (nonatomic) NSMutableArray *shapesToDraw;
+
 @end
 
 @implementation SEPreviewView
@@ -41,6 +43,34 @@
 
 - (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation {
 	[self.predscriptionView rotatePredscriptionLabelForOrientation:orientation];
+}
+
+- (void)drawRect:(CGRect)rect {
+	[super drawRect:rect];
+	
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	for (SEShape *shape in self.shapesToDraw) {
+		[shape drawInContext:context];
+	}
+}
+
+#pragma mark - Shape
+
+- (void)addShape:(SEShape *)shape {
+	[self.shapesToDraw addObject:shape];
+}
+
+- (void)clearShapes {
+	[self.shapesToDraw removeAllObjects];
+}
+
+- (NSMutableArray *)shapesToDraw {
+	if (_shapesToDraw)
+		return _shapesToDraw;
+	
+	_shapesToDraw = [[NSMutableArray alloc] init];
+	return _shapesToDraw;
 }
 
 #pragma mark - Predscription View
