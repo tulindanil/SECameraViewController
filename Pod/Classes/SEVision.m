@@ -124,6 +124,12 @@
 	return _captureVideoDataOutput;
 }
 
+#pragma mark - Output Size
+
+- (CGSize)outputSize {
+	return CGSizeMake(1280, 720);
+}
+
 #pragma mark - AVCaptureVideoDataOutputDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput

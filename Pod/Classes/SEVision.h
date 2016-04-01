@@ -21,6 +21,8 @@
 - (void)startPreview;
 - (void)stopPreview;
 
+@property (nonatomic) CGSize outputSize;
+
 @end
 
 @protocol SEVisionDelegate <NSObject>
