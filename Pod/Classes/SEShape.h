@@ -18,7 +18,6 @@
 @interface SEShape : NSObject 
 
 - (instancetype)scaledShape:(CGSize)scaleFactor;
-
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end
