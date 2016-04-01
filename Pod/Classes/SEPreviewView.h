@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SEShape.h"
+#import "SEPredscriptionView.h"
 
 @interface SEPreviewView : UIView
 
-@property (nonatomic) NSString *predscription;
+@property (nonatomic, readonly) SEPredscriptionView *predscriptionView;
 
-- (void)showPredscriptionLabel:(BOOL)animated;
-- (void)hidePredscriptionLabel:(BOOL)animated;
-
-- (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation;
+- (void)addShape:(SEShape *)shape;
+- (void)clearShapes;
 
 @end

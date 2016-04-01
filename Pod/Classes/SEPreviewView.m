@@ -12,7 +12,7 @@
 
 @interface SEPreviewView ()
 
-@property (nonatomic, strong) SEPredscriptionView *predscriptionView;
+@property (nonatomic, readwrite) SEPredscriptionView *predscriptionView;
 
 @end
 
@@ -50,7 +50,6 @@
 		return _predscriptionView;
 	
 	_predscriptionView = [[SEPredscriptionView alloc] init];
-	_predscriptionView.predscription = self.predscription;
 	return _predscriptionView;
 }
 
