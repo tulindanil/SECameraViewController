@@ -59,10 +59,12 @@
 
 - (void)addShape:(SEShape *)shape {
 	[self.shapesToDraw addObject:shape];
+	[self setNeedsDisplay];
 }
 
 - (void)clearShapes {
 	[self.shapesToDraw removeAllObjects];
+	[self setNeedsDisplay];
 }
 
 - (NSMutableArray *)shapesToDraw {
