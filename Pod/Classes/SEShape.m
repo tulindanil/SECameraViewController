@@ -34,6 +34,12 @@
 	return self.internal[idx];
 }
 
+#pragma mark - drawing
+
+- (void)drawInContext:(CGContextRef)context {
+	
+}
+
 #pragma mark - Internal
 
 - (NSMutableArray *)internal {

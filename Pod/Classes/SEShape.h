@@ -20,4 +20,6 @@
 - (instancetype)scaledShape:(CGSize)scaleFactor;
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 
+- (void)drawInContext:(CGContextRef)context;
+
 @end
