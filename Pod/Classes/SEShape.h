@@ -6,8 +6,15 @@
 //
 //
 
-#ifndef SEShape_h
-#define SEShape_h
+@import Foundation;
 
+@interface SEShape : NSObject 
 
-#endif /* SEShape_h */
++ (instancetype)scaledShape:(CGSize)scaleFactor;
+
+@property (nonatomic) CGPoint topLeft;
+@property (nonatomic) CGPoint topRight;
+@property (nonatomic) CGPoint bottomLeft;
+@property (nonatomic) CGPoint bottomRight;
+
+@end
