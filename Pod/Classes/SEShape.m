@@ -10,22 +10,41 @@
 
 @interface SEShape ()
 
+@property (nonatomic) NSMutableArray *internal;
+
 @end
 
 @implementation SEShape
 
-+ (instancetype)scaledShape:(CGSize)scaleFactor {
+- (instancetype)scaledShape:(CGSize)scaleFactor {
 	SEShape *shape = [[SEShape alloc] init];
 	
 	CGFloat widthFactor = scaleFactor.width;
 	CGFloat heightFactor = scaleFactor.height;
 	
+	for (SEPoint *point in self.internal) {
+		point.x *= widthFactor;
+		point.y *= heightFactor;
+	}
+	
 	return shape;
 }
 
-+ (CGPoint)scalePoint:(CGPoint)point withScale:(CGSize)scale {
-	CGPoint newPoint = {};
-	return newPoint;
+- (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx {
+	return self.internal[idx];
+}
+
+#pragma mark - Internal
+
+- (NSMutableArray *)internal {
+	if (_internal)
+		return _internal;
+	
+	_internal = [[NSMutableArray alloc] initWithCapacity:4];
+	for (NSUInteger i = 0; i < 4; ++i) {
+		[_internal addObject:[[SEPoint alloc] init]];
+	}
+	return _internal;
 }
 
 @end
