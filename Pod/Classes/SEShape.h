@@ -8,13 +8,17 @@
 
 @import Foundation;
 
+@interface SEPoint : NSObject
+
+@property (nonatomic) CGFloat x;
+@property (nonatomic) CGFloat y;
+
+@end
+
 @interface SEShape : NSObject 
 
-+ (instancetype)scaledShape:(CGSize)scaleFactor;
+- (instancetype)scaledShape:(CGSize)scaleFactor;
 
-@property (nonatomic) CGPoint topLeft;
-@property (nonatomic) CGPoint topRight;
-@property (nonatomic) CGPoint bottomLeft;
-@property (nonatomic) CGPoint bottomRight;
+- (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end
