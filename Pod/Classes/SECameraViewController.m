@@ -145,11 +145,11 @@
 
 - (void)addShape:(SEShape *)shape {
 	CGSize scaleFactor;
-	CGSize outputSize = self.vision.outputSize;
+	CGSize outputSize = [self getCurrentOutputSampleSize];
 	CGSize previewSize = self.previewView.frame.size;
 	
-	scaleFactor.width = outputSize.width / previewSize.width;
-	scaleFactor.height = outputSize.height / previewSize.height;
+	scaleFactor.width = previewSize.width / outputSize.width;
+	scaleFactor.height = scaleFactor.width;
 	
 	SEShape *scaledShape = [shape scaledShape:scaleFactor];
 	[self.previewView addShape:scaledShape];
