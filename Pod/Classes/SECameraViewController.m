@@ -144,11 +144,19 @@
 }
 
 - (void)addShape:(SEShape *)shape {
+	CGSize scaleFactor;
+	CGSize outputSize = self.vision.outputSize;
+	CGSize previewSize = self.previewView.frame.size;
 	
+	scaleFactor.width = outputSize.width / previewSize.width;
+	scaleFactor.height = outputSize.height / previewSize.height;
+	
+	SEShape *scaledShape = [shape scaledShape:scaleFactor];
+	[self.previewView addShape:scaledShape];
 }
 
 - (void)clearShapes {
-	
+	[self.previewView clearShapes];
 }
 
 #pragma mark - Orientation
