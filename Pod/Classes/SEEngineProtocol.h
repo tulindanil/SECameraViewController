@@ -24,10 +24,3 @@
 - (void)stopSession;
 
 @end
-
-typedef struct {
-	CGPoint topLeft;
-	CGPoint topRight;
-	CGPoint bottomRight;
-	CGPoint bottomLeft;
-} SEShape;
