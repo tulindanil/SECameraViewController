@@ -133,20 +133,22 @@
 
 #pragma mark - Draw Shape
 
-- (void)drawShape:(SEShape)shape {
-	UIBezierPath *path = [UIBezierPath bezierPath];
-	[path moveToPoint:shape.topLeft];
-	[path addLineToPoint:shape.topRight];
-	[path addLineToPoint:shape.bottomRight];
-	[path addLineToPoint:shape.bottomLeft];
-	[path addLineToPoint:shape.topLeft];
-	[path addLineToPoint:shape.topRight];
-	CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-	shapeLayer.path = [path CGPath];
-	shapeLayer.strokeColor = [[UIColor whiteColor] CGColor];
-	shapeLayer.lineWidth = 1.5f;
-	shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-	[self.previewView.layer addSublayer:shapeLayer];
+- (CGSize)getCurrentOutputSampleSize {
+	if (self.orientation == UIDeviceOrientationLandscapeLeft ||
+		self.orientation == UIDeviceOrientationLandscapeRight) {
+		return self.vision.outputSize;
+	} else {
+		CGSize origin = self.vision.outputSize;
+		return CGSizeMake(origin.height, origin.width);
+	}
+}
+
+- (void)addShape:(SEShape *)shape {
+	
+}
+
+- (void)clearShapes {
+	
 }
 
 #pragma mark - Orientation
@@ -164,7 +166,7 @@
 	UIDeviceOrientation orientation = self.orientation;
 	
 	[UIView animateWithDuration:defaultAnimationDuration animations:^{
-		[self.previewView rotatePredscriptionLabelForOrientation:orientation];
+		[self.previewView.predscriptionView rotatePredscriptionLabelForOrientation:orientation];
 	}];
 }
 
@@ -201,7 +203,7 @@
 	
 	_previewView = [[SEPreviewView alloc] init];
 	_previewView.backgroundColor = [UIColor blackColor];
-	_previewView.predscription = @"PLACE";
+	_previewView.predscriptionView.predscription = @"PLACE";
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
 	previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -229,7 +231,7 @@
 
 - (void)visionSessionDidStartPreview:(SEVision *)vision {
 	[self.shutterView openWithCompletion:^{
-		[self.previewView showPredscriptionLabel:YES];
+		[self.previewView.predscriptionView showPredscriptionLabel:YES];
 		[self.engine startSession];
 	}];
 }
