@@ -9,6 +9,7 @@
 @import UIKit;
 @import AVFoundation;
 
+#import "SEShape.h"
 #import "SEEngineProtocol.h"
 
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
@@ -27,7 +28,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 @property (nonatomic, weak) id<EngineProtocol> engine;
 
-- (void)drawShape:(SEShape)shape;
+- (void)addShape:(SEShape *)shape;
+- (void)clearShapes;
 
 @end
 
