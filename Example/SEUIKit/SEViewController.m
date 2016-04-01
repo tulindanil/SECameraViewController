@@ -79,11 +79,22 @@
 	cameraViewController.delegate = self;
 	cameraViewController.outputFormat = SEOutputFormatWidescreen;
 	cameraViewController.flashEnabled = YES;
-	SEShape shape;
-	[cameraViewController drawShape:shape];
+	
 	[self presentViewController:cameraViewController
 					   animated:YES
-					 completion:nil];
+					 completion:^{
+						 SEShape *shape = [[SEShape alloc] init];
+						 CGPoint points[] = {{100, 100}, {620, 100}, {620, 200}, {100, 200}};
+						 for (NSUInteger i = 0; i < 4; i++) {
+							 SEPoint *point = [[SEPoint alloc] init];
+							 point.x = points[i].x;
+							 point.y = points[i].y;
+							 
+							 [shape insertPoint:point atIndex:i];
+						 }
+						 
+						 [cameraViewController addShape:shape];
+					 }];
 }
 
 #pragma mark - SECameraViewConrtollerDelegate
@@ -125,7 +136,7 @@
 		mutableBytes[i] = mutableBytes[i + 2]; // blue <- red
 		mutableBytes[i + 2] = blueByte;        // red <- blue
 	} // BGRA -> RGBA
-
+	
 	self.lastCapturedImage = [self createImageFromRGBAData:mutableData
 													 width:width
 													height:height];
