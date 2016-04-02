@@ -16,6 +16,11 @@
 
 @implementation SEShapeView
 
+- (void)didMoveToSuperview {
+	[super didMoveToSuperview];
+	self.backgroundColor = [UIColor clearColor];
+}
+
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	
