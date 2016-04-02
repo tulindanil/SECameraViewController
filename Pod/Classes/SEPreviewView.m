@@ -8,11 +8,14 @@
 
 #import "SEPreviewView.h"
 
+#import "SEShapeView.h"
 #import "SEPredscriptionView.h"
 
 @interface SEPreviewView ()
 
 @property (nonatomic, readwrite) SEPredscriptionView *predscriptionView;
+
+@property (nonatomic) SEShapeView *shapeView;
 
 @property (nonatomic) NSMutableArray *shapesToDraw;
 
@@ -23,10 +26,15 @@
 - (void)didMoveToSuperview {
 	[super didMoveToSuperview];
 	[self addSubview:self.predscriptionView];
+	[self addSubview:self.shapeView];
 }
 
 - (void)updateConstraints {
 	[self.predscriptionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+		make.edges.equalTo(self);
+	}];
+	
+	[self.shapeView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self);
 	}];
 	
@@ -45,34 +53,22 @@
 	[self.predscriptionView rotatePredscriptionLabelForOrientation:orientation];
 }
 
-- (void)drawRect:(CGRect)rect {
-	[super drawRect:rect];
-	
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	
-	for (SEShape *shape in self.shapesToDraw) {
-		[shape drawInContext:context];
-	}
-}
-
 #pragma mark - Shape
 
 - (void)addShape:(SEShape *)shape {
-	[self.shapesToDraw addObject:shape];
-	[self setNeedsDisplay];
+	[self.shapeView addShape:shape];
 }
 
 - (void)clearShapes {
-	[self.shapesToDraw removeAllObjects];
-	[self setNeedsDisplay];
+	[self.shapeView clearShapes];
 }
 
-- (NSMutableArray *)shapesToDraw {
-	if (_shapesToDraw)
-		return _shapesToDraw;
+- (SEShape *)shapeView {
+	if (_shapeView)
+		return _shapeView;
 	
-	_shapesToDraw = [[NSMutableArray alloc] init];
-	return _shapesToDraw;
+	_shapeView = [[SEShapeView alloc] init];
+	return _shapeView;
 }
 
 #pragma mark - Predscription View
