@@ -49,8 +49,8 @@
 - (void)drawInContext:(CGContextRef)context {
 	CGContextSetLineWidth(context, 1.5f);
 	CGContextSetAlpha(context, 0.8f);
-//	CGContextSetLineCap(context, kCGLineCapRound);
-//	CGContextSetLineJoin(context, kCGLineJoinRound);
+	CGContextSetLineCap(context, kCGLineCapRound);
+	CGContextSetLineJoin(context, kCGLineJoinRound);
 	
 	CGContextSetLineWidth(context, 1.0f);
 	
