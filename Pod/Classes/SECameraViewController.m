@@ -149,7 +149,7 @@
 	CGSize previewSize = self.previewView.frame.size;
 	
 	scaleFactor.width = previewSize.width / outputSize.width;
-	scaleFactor.height = scaleFactor.width;
+	scaleFactor.height = previewSize.height / outputSize.height;
 	
 	SEShape *scaledShape = [shape scaledShape:scaleFactor];
 	[self.previewView addShape:scaledShape];
