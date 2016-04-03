@@ -6,8 +6,8 @@
 //
 //
 
-@import UIKit;
-@import AVFoundation;
+#import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 #import "SEShape.h"
 #import "SEEngineProtocol.h"

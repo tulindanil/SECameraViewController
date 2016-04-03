@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 tulindanil. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import "SEAppDelegate.h"
 
 int main(int argc, char * argv[])
