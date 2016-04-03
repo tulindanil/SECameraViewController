@@ -10,6 +10,14 @@
 
 @implementation SEPoint
 
+- (instancetype)initWithPoint:(CGPoint)point {
+	if (self = [super init]) {
+		self.x = point.x;
+		self.y = point.y;
+	}
+	return self;
+}
+
 @end
 
 @interface SEShape ()

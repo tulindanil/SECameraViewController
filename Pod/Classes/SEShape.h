@@ -10,6 +10,8 @@
 
 @interface SEPoint : NSObject
 
+- (instancetype)initWithPoint:(CGPoint)point;
+
 @property (nonatomic) CGFloat x;
 @property (nonatomic) CGFloat y;
 
