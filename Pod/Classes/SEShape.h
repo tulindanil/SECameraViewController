@@ -10,20 +10,26 @@
 
 @interface SEPoint : NSObject
 
-- (instancetype)initWithPoint:(CGPoint)point;
+- (instancetype)initWithCGPoint:(CGPoint)point;
+- (instancetype)initWithPoint:(SEPoint *)point;
+- (instancetype)initConvertedWithPoint:(SEPoint *)point;
 
 @property (nonatomic) CGFloat x;
 @property (nonatomic) CGFloat y;
 
 @end
 
-@interface SEShape : NSObject 
+@interface SEShape : NSObject
 
-- (instancetype)scaledShape:(CGSize)scaleFactor;
+- (instancetype)initWithShape:(SEShape *)shape;
+- (instancetype)initConvertedWithShape:(SEShape *)shape;
+
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 
-- (void)insertPoint:(SEPoint *)anObject atIndex:(NSUInteger)index;
+- (void)transformXCoordinate:(CGFloat)factor withOffset:(CGFloat)offset;
+- (void)transformYCoordinate:(CGFloat)factor withOffset:(CGFloat)offset;
 
+- (void)insertPoint:(SEPoint *)anObject atIndex:(NSUInteger)index;
 - (void)drawInContext:(CGContextRef)context;
 
 @end

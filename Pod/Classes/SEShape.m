@@ -10,10 +10,26 @@
 
 @implementation SEPoint
 
-- (instancetype)initWithPoint:(CGPoint)point {
+- (instancetype)initWithCGPoint:(CGPoint)point {
 	if (self = [super init]) {
 		self.x = point.x;
 		self.y = point.y;
+	}
+	return self;
+}
+
+- (instancetype)initWithPoint:(SEPoint *)point {
+	if (self = [super init]) {
+		self.x = point.x;
+		self.y = point.y;
+	}
+	return self;
+}
+
+- (instancetype)initConvertedWithPoint:(SEPoint *)point {
+	if (self = [super init]) {
+		self.x = point.y;
+		self.y = point.x;
 	}
 	return self;
 }
@@ -28,20 +44,39 @@
 
 @implementation SEShape
 
-- (instancetype)scaledShape:(CGSize)scaleFactor {
-	SEShape *shape = [[SEShape alloc] init];
-	
-	CGFloat widthFactor = scaleFactor.width;
-	CGFloat heightFactor = scaleFactor.height;
-	
-	for (NSUInteger i = 0; i < 4; i++) {
-		SEPoint *point = [[SEPoint alloc] init];
-		point.x = self[i].x * widthFactor;
-		point.y = self[i].y * heightFactor;
-		[shape insertPoint:point atIndex:i];
+- (instancetype)initWithShape:(SEShape *)shape {
+	if (self = [super init]) {
+		for (SEPoint *point in shape.internal) {
+			[self.internal addObject:point];
+		}
 	}
-	
-	return shape;
+	return self;
+}
+
+- (instancetype)initConvertedWithShape:(SEShape *)shape {
+	if (self = [super init]) {
+		for (SEPoint *point in shape.internal) {
+			SEPoint *convertedPoint = [[SEPoint alloc]
+									   initConvertedWithPoint:point];
+			NSUInteger index = [shape.internal indexOfObject:point];
+			self.internal[index] = convertedPoint;
+		}
+	}
+	return self;
+}
+
+- (void)transformXCoordinate:(CGFloat)factor withOffset:(CGFloat)offset {
+	for (SEPoint *point in self.internal) {
+		point.x *= factor;
+		point.x += offset;
+	}
+}
+
+- (void)transformYCoordinate:(CGFloat)factor withOffset:(CGFloat)offset {
+	for (SEPoint *point in self.internal) {
+		point.y *= factor;
+		point.y += offset;
+	}
 }
 
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx {
