@@ -84,7 +84,7 @@
 					   animated:YES
 					 completion:^{
 						 SEShape *shape = [[SEShape alloc] init];
-						 CGPoint points[] = {{100, 100}, {620, 100}, {620, 200}, {100, 200}};
+						 CGPoint points[] = {{260, 540}, {460, 540}, {460, 740}, {260, 740}};
 						 for (NSUInteger i = 0; i < 4; i++) {
 							 SEPoint *point = [[SEPoint alloc] init];
 							 point.x = points[i].x;
