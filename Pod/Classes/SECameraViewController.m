@@ -214,7 +214,6 @@
 	_previewView.predscriptionView.predscription = @"PLACE";
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
-	previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 	[_previewView.layer addSublayer:previewLayer];
 	
 	_shutterView = [[SEShutterView alloc] init];

@@ -110,7 +110,7 @@
 {
 	if (!_previewLayer) {
 		_previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.captureSession];
-		_previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+		_previewLayer.videoGravity = AVLayerVideoGravityResize;
 	}
 	return _previewLayer;
 }
