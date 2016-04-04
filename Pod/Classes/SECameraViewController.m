@@ -133,23 +133,20 @@
 
 #pragma mark - Draw Shape
 
-- (SEShape *)convertShape:(SEShape *)shape {
-	if (self.orientation == UIDeviceOrientationLandscapeLeft ||
-		self.orientation == UIDeviceOrientationLandscapeRight) {
-		return [[SEShape alloc] initConvertedWithShape:shape];
-	} else {
-		return shape;
-	}
-}
-
 - (void)addShape:(SEShape *)shape {
-	SEShape *convertedShape = [self convertShape:shape];
-	
+	SEShape *convertedShape = [[SEShape alloc] initConvertedWithShape:shape
+													   andOrientation:self.orientation];
 	CGSize previewSize = self.previewView.frame.size;
 	CGSize outputSize = self.vision.outputSize;
 	
 	CGFloat outputHeight = outputSize.width; // according to preview view's portrait size
 	CGFloat outputWidth = outputSize.height;
+	
+	if (self.orientation == UIDeviceOrientationLandscapeLeft) {
+		[convertedShape transformYCoordinate:1.0f withOffset:outputWidth];
+	} else if (self.orientation == UIDeviceOrientationLandscapeRight) {
+		[convertedShape transformXCoordinate:1.0f withOffset:outputHeight];
+	}
 	
 	CGFloat factor = previewSize.width / outputWidth;
 	
