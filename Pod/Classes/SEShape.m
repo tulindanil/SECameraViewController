@@ -100,7 +100,8 @@
 
 #pragma mark - drawing
 
-- (void)drawInContext:(CGContextRef)context {
+- (void)drawInContext:(CGContextRef)context
+			withColor:(UIColor *)color {
 	CGContextSetLineWidth(context, 1.5f);
 	CGContextSetAlpha(context, 0.8f);
 	CGContextSetLineCap(context, kCGLineCapRound);
@@ -108,7 +109,7 @@
 	
 	CGContextSetLineWidth(context, 1.0f);
 	
-	CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+	CGContextSetStrokeColorWithColor(context, color.CGColor);
 	CGContextBeginPath(context);
 	
 	SEPoint *firstPoint = self[0];

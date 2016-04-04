@@ -12,7 +12,8 @@
 
 @interface SEShapeView : UIView
 
-- (void)addShape:(SEShape *)shape;
+- (void)addShape:(SEShape *)shape
+	   withColor:(UIColor *)color;
 - (void)clearShapes;
 
 @end

@@ -31,6 +31,7 @@
 - (void)transformYCoordinate:(CGFloat)factor withOffset:(CGFloat)offset;
 
 - (void)insertPoint:(SEPoint *)anObject atIndex:(NSUInteger)index;
-- (void)drawInContext:(CGContextRef)context;
+- (void)drawInContext:(CGContextRef)context
+			withColor:(UIColor *)color;
 
 @end

@@ -11,6 +11,7 @@
 @interface SEShapeView ()
 
 @property (nonatomic) NSMutableArray *shapesToDraw;
+@property (nonatomic) NSMutableArray *shapesColors;
 
 @end
 
@@ -27,19 +28,24 @@
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	for (SEShape *shape in self.shapesToDraw) {
-		[shape drawInContext:context];
+		NSUInteger index = [self.shapesToDraw indexOfObject:shape];
+		[shape drawInContext:context
+				   withColor:self.shapesColors[index]];
 	}
 }
 
 #pragma mark - Shape
 
-- (void)addShape:(SEShape *)shape {
+- (void)addShape:(SEShape *)shape
+	   withColor:(UIColor *)color {
 	[self.shapesToDraw addObject:shape];
+	[self.shapesColors addObject:color];
 	[self setNeedsDisplay];
 }
 
 - (void)clearShapes {
 	[self.shapesToDraw removeAllObjects];
+	[self.shapesColors removeAllObjects];
 	[self setNeedsDisplay];
 }
 
@@ -49,6 +55,14 @@
 	
 	_shapesToDraw = [[NSMutableArray alloc] init];
 	return _shapesToDraw;
+}
+
+- (NSMutableArray *)shapesColors {
+	if (_shapesColors)
+		return _shapesColors;
+	
+	_shapesColors = [[NSMutableArray alloc] init];
+	return _shapesColors;
 }
 
 @end

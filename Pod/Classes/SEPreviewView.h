@@ -14,7 +14,8 @@
 
 @property (nonatomic, readonly) SEPredscriptionView *predscriptionView;
 
-- (void)addShape:(SEShape *)shape;
+- (void)addShape:(SEShape *)shape
+	   withColor:(UIColor *)color;
 - (void)clearShapes;
 
 @end

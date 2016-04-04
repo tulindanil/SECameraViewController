@@ -165,7 +165,8 @@
 	[convertedShape transformXCoordinate:factor withOffset:.0f];
 	[convertedShape transformYCoordinate:factor withOffset:-offset];
 	
-	[self.previewView addShape:convertedShape];
+	[self.previewView addShape:convertedShape
+					 withColor:self.accentColor];
 }
 
 - (void)clearShapes {

@@ -55,8 +55,10 @@
 
 #pragma mark - Shape
 
-- (void)addShape:(SEShape *)shape {
-	[self.shapeView addShape:shape];
+- (void)addShape:(SEShape *)shape
+	   withColor:(UIColor *)color {
+	[self.shapeView addShape:shape
+				   withColor:color];
 }
 
 - (void)clearShapes {
