@@ -59,11 +59,11 @@
 		for (SEPoint *point in shape.internal) {
 			SEPoint *convertedPoint = [[SEPoint alloc] init];
 			if (orientation == UIDeviceOrientationLandscapeLeft) {
-				convertedPoint.x = point.y;
-				convertedPoint.y = -1 * point.x;
-			} else if (orientation == UIDeviceOrientationLandscapeRight) {
-				convertedPoint.x = -1 * point.y;
+				convertedPoint.x = -point.y;
 				convertedPoint.y = point.x;
+			} else if (orientation == UIDeviceOrientationLandscapeRight) {
+				convertedPoint.x = point.y;
+				convertedPoint.y = -point.x;
 			} else {
 				convertedPoint.x = point.x;
 				convertedPoint.y = point.y;
