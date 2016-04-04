@@ -110,6 +110,7 @@
 	CGContextSetLineWidth(context, 1.0f);
 	
 	CGContextSetStrokeColorWithColor(context, color.CGColor);
+	CGContextSetFillColorWithColor(context, color.CGColor);
 	CGContextBeginPath(context);
 	
 	SEPoint *firstPoint = self[0];
@@ -120,9 +121,9 @@
 			continue;
 		[self addLineToPoint:point withContext:context];
 	}
-	[self addLineToPoint:firstPoint withContext:context];
 	
-	CGContextStrokePath(context);
+	CGContextClosePath(context);
+	CGContextDrawPath(context, kCGPathFillStroke);
 }
 
 - (void)addLineToPoint:(SEPoint *)point
