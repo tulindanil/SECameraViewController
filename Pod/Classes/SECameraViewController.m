@@ -137,7 +137,7 @@
 					 size:(CGSize)size {
 	
 	SEShape *convertedShape = [[SEShape alloc] initConvertedWithShape:shape
-													   andOrientation:self.orientation
+													      orientation:self.orientation
 																 size:size];
 	
 	return convertedShape;

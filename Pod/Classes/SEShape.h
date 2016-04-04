@@ -22,7 +22,7 @@
 
 - (instancetype)initWithShape:(SEShape *)shape;
 - (instancetype)initConvertedWithShape:(SEShape *)shape
-						andOrientation:(UIDeviceOrientation)orientation
+						   orientation:(UIDeviceOrientation)orientation
 								  size:(CGSize)size;
 
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;

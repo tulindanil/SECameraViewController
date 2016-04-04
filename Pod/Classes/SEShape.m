@@ -54,7 +54,7 @@
 }
 
 - (instancetype)initConvertedWithShape:(SEShape *)shape
-						andOrientation:(UIDeviceOrientation)orientation
+						   orientation:(UIDeviceOrientation)orientation
 								  size:(CGSize)size {
 	if (self = [super init]) {
 		for (SEPoint *point in shape.internal) {
