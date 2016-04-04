@@ -225,7 +225,7 @@
 	
 	_previewView = [[SEPreviewView alloc] init];
 	_previewView.backgroundColor = [UIColor blackColor];
-	_previewView.predscriptionView.predscription = @"PLACE";
+//	_previewView.predscriptionView.predscription = @"PLACE";
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
 	[_previewView.layer addSublayer:previewLayer];
