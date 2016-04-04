@@ -42,14 +42,18 @@
 - (instancetype)initWithDelegate:(id<SECameraViewControllerDelegate>)delegate {
 	if (self = [super init]) {
 		self.delegate = delegate;
+		
+		self.darkPrimaryColor = MP_HEX_RGB([darkPrimaryColor copy]);
+		self.defaultPrimaryColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+		self.accentColor = MP_HEX_RGB([accentColor copy]);
 	}
 	return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad {z
 	[super viewDidLoad];
 	
-	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
+	self.view.backgroundColor = self.darkPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
 	[self.view addSubview:self.closeButton];
@@ -86,10 +90,6 @@
 		make.height.equalTo(@(50));
 	}];
 	
-//	[self.buttonsContainer mas_remakeConstraints:^(MASConstraintMaker *make) {
-//		make.bottom.equalTo(self.closeButton.mas_top).offset(-8);
-//		make.centerX.equalTo(self.view.mas_centerX);
-//	}];
 	[super updateViewConstraints];
 }
 
@@ -193,7 +193,7 @@
 		return _closeButton;
 	
 	_closeButton = [[UIButton alloc] init];
-	[_closeButton setBackgroundColor:MP_HEX_RGB([defaultPrimaryColor copy])];
+	[_closeButton setBackgroundColor:self.defaultPrimaryColor];
 	[_closeButton setTitle:[NSLocalizedString(@"Close", nil) uppercaseString]
 				  forState:UIControlStateNormal];
 	[_closeButton addTarget:self

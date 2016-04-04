@@ -31,6 +31,10 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 - (void)addShape:(SEShape *)shape;
 - (void)clearShapes;
 
+@property (nonatomic) UIColor *defaultPrimaryColor;
+@property (nonatomic) UIColor *darkPrimaryColor;
+@property (nonatomic) UIColor *accentColor;
+
 @end
 
 @protocol SECameraViewControllerDelegate <NSObject>
