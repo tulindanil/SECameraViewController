@@ -40,9 +40,14 @@
 #pragma mark - Life Cycle
 
 - (instancetype)initWithDelegate:(id<SECameraViewControllerDelegate>)delegate {
-	if (self = [super init]) {
+	if (self = [self init]) {
 		self.delegate = delegate;
-		
+	}
+	return self;
+}
+
+- (instancetype)init {
+	if (self = [super init]) {
 		self.darkPrimaryColor = MP_HEX_RGB([darkPrimaryColor copy]);
 		self.defaultPrimaryColor = MP_HEX_RGB([defaultPrimaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
