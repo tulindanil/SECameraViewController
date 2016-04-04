@@ -50,7 +50,7 @@
 	return self;
 }
 
-- (void)viewDidLoad {z
+- (void)viewDidLoad {
 	[super viewDidLoad];
 	
 	self.view.backgroundColor = self.darkPrimaryColor;
