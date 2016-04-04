@@ -12,7 +12,6 @@
 
 - (instancetype)initWithCGPoint:(CGPoint)point;
 - (instancetype)initWithPoint:(SEPoint *)point;
-- (instancetype)initConvertedWithPoint:(SEPoint *)point;
 
 @property (nonatomic) CGFloat x;
 @property (nonatomic) CGFloat y;
@@ -22,7 +21,7 @@
 @interface SEShape : NSObject
 
 - (instancetype)initWithShape:(SEShape *)shape;
-- (instancetype)initConvertedWithShape:(SEShape *)shape;
+- (instancetype)initConvertedWithShape:(SEShape *)shape andOrientation:(UIDeviceOrientation)orientation;
 
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 

@@ -53,11 +53,21 @@
 	return self;
 }
 
-- (instancetype)initConvertedWithShape:(SEShape *)shape {
+- (instancetype)initConvertedWithShape:(SEShape *)shape
+						andOrientation:(UIDeviceOrientation)orientation {
 	if (self = [super init]) {
 		for (SEPoint *point in shape.internal) {
-			SEPoint *convertedPoint = [[SEPoint alloc]
-									   initConvertedWithPoint:point];
+			SEPoint *convertedPoint = [[SEPoint alloc] init];
+			if (orientation == UIDeviceOrientationLandscapeLeft) {
+				convertedPoint.x = point.y;
+				convertedPoint.y = -1 * point.x;
+			} else if (orientation == UIDeviceOrientationLandscapeRight) {
+				convertedPoint.x = -1 * point.y;
+				convertedPoint.y = point.x;
+			} else {
+				convertedPoint.x = point.x;
+				convertedPoint.y = point.y;
+			}
 			NSUInteger index = [shape.internal indexOfObject:point];
 			self.internal[index] = convertedPoint;
 		}
@@ -67,15 +77,15 @@
 
 - (void)transformXCoordinate:(CGFloat)factor withOffset:(CGFloat)offset {
 	for (SEPoint *point in self.internal) {
-		point.x *= factor;
 		point.x += offset;
+		point.x *= factor;
 	}
 }
 
 - (void)transformYCoordinate:(CGFloat)factor withOffset:(CGFloat)offset {
 	for (SEPoint *point in self.internal) {
-		point.y *= factor;
 		point.y += offset;
+		point.y *= factor;
 	}
 }
 
