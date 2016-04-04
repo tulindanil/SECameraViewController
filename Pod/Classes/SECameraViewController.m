@@ -217,6 +217,16 @@
 	}];
 }
 
+#pragma mark - Label
+
+- (void)showLabel {
+	[self.previewView.predscriptionView showPredscriptionLabel:YES];
+}
+
+- (void)hideLabel {
+	[self.previewView.predscriptionView hidePredscriptionLabel:YES];
+}
+
 #pragma mark - PreviewView
 
 - (UIView *)previewView {
@@ -225,7 +235,7 @@
 	
 	_previewView = [[SEPreviewView alloc] init];
 	_previewView.backgroundColor = [UIColor blackColor];
-//	_previewView.predscriptionView.predscription = @"PLACE";
+	_previewView.predscriptionView.predscription = [self.label uppercaseString];
 	
 	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
 	[_previewView.layer addSublayer:previewLayer];

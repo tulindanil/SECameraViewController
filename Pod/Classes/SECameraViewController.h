@@ -31,6 +31,11 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 - (void)addShape:(SEShape *)shape;
 - (void)clearShapes;
 
+@property (nonatomic) NSString *label;
+
+- (void)showLabel;
+- (void)hideLabel;
+
 @property (nonatomic) UIColor *defaultPrimaryColor;
 @property (nonatomic) UIColor *darkPrimaryColor;
 @property (nonatomic) UIColor *accentColor;
