@@ -54,16 +54,17 @@
 }
 
 - (instancetype)initConvertedWithShape:(SEShape *)shape
-						andOrientation:(UIDeviceOrientation)orientation {
+						andOrientation:(UIDeviceOrientation)orientation
+								  size:(CGSize)size {
 	if (self = [super init]) {
 		for (SEPoint *point in shape.internal) {
 			SEPoint *convertedPoint = [[SEPoint alloc] init];
 			if (orientation == UIDeviceOrientationLandscapeLeft) {
-				convertedPoint.x = -point.y;
+				convertedPoint.x = size.height - point.y;
 				convertedPoint.y = point.x;
 			} else if (orientation == UIDeviceOrientationLandscapeRight) {
 				convertedPoint.x = point.y;
-				convertedPoint.y = -point.x;
+				convertedPoint.y = size.width - point.x;
 			} else {
 				convertedPoint.x = point.x;
 				convertedPoint.y = point.y;

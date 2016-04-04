@@ -21,7 +21,9 @@
 @interface SEShape : NSObject
 
 - (instancetype)initWithShape:(SEShape *)shape;
-- (instancetype)initConvertedWithShape:(SEShape *)shape andOrientation:(UIDeviceOrientation)orientation;
+- (instancetype)initConvertedWithShape:(SEShape *)shape
+						andOrientation:(UIDeviceOrientation)orientation
+								  size:(CGSize)size;
 
 - (SEPoint *)objectAtIndexedSubscript:(NSUInteger)idx;
 
