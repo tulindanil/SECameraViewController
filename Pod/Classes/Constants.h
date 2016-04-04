@@ -13,6 +13,7 @@
 
 const static NSString *defaultPrimaryColor = @"1A1A1C";
 const static NSString *darkPrimaryColor = @"121315";
+const static NSString *accentColor = @"9E9E9E";
 
 const static NSInteger bottomToolbarHeight = 50;
 
