@@ -49,7 +49,7 @@
 - (instancetype)init {
 	if (self = [super init]) {
 		self.darkPrimaryColor = MP_HEX_RGB([darkPrimaryColor copy]);
-		self.defaultPrimaryColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+		self.defaultPrimaryColor = MP_HEX_RGB([primaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
 		
 		self.idleTime = 10;

@@ -11,9 +11,15 @@
 #ifndef Constants_h
 #define Constants_h
 
-const static NSString *defaultPrimaryColor = @"1A1A1C";
-const static NSString *darkPrimaryColor = @"121315";
-const static NSString *accentColor = @"9E9E9E";
+const static NSString *primaryColor = @"9E9E9E";
+const static NSString *darkPrimaryColor = @"616161";
+const static NSString *accentColor = @"607D8B";
+
+const static NSString *lightPrimaryColor = @"F5F5F5";
+const static NSString *primaryTextColor = @"F5F5F5";
+
+const static NSString *secondaryTextColor = @"727272";
+const static NSString *dividerColor = @"B6B6B6";
 
 const static NSInteger bottomToolbarHeight = 50;
 
