@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 @property (nonatomic) NSString *label;
 
+@property (nonatomic) float idleTime;
+
 - (void)showLabel;
 - (void)hideLabel;
 

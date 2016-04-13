@@ -51,6 +51,8 @@
 		self.darkPrimaryColor = MP_HEX_RGB([darkPrimaryColor copy]);
 		self.defaultPrimaryColor = MP_HEX_RGB([defaultPrimaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
+		
+		self.idleTime = 10;
 	}
 	return self;
 }
@@ -124,6 +126,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[self.shutterView close];
+	self.appeared = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -265,6 +268,15 @@
 		[self.previewView.predscriptionView showPredscriptionLabel:YES];
 		[self.engine startSession];
 	}];
+	
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+		[NSThread sleepForTimeInterval:self.idleTime];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (self.isAppeared)
+				[self dismissViewControllerAnimated:YES
+										 completion:nil];
+		});
+	});
 }
 
 - (void)vision:(SEVision *)vision
