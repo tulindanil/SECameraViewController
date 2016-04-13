@@ -184,7 +184,13 @@
 
 - (UIDeviceOrientation)orientation {
 	UIDevice *device = [UIDevice currentDevice];
-	return device.orientation;
+	UIDeviceOrientation orientation = device.orientation;
+	
+	if (orientation == UIDeviceOrientationFaceUp)
+		return _orientation;
+	
+	_orientation = orientation;
+	return _orientation;
 }
 
 - (void)didChangeOrientation {
