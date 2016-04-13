@@ -202,7 +202,7 @@
 		return _closeButton;
 	
 	_closeButton = [[UIButton alloc] init];
-	[_closeButton setBackgroundColor:self.defaultPrimaryColor];
+	[_closeButton setBackgroundColor:self.darkPrimaryColor];
 	[_closeButton setTitle:[NSLocalizedString(@"Close", nil) uppercaseString]
 				  forState:UIControlStateNormal];
 	[_closeButton addTarget:self
