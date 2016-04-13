@@ -27,9 +27,9 @@
 	
 	navigationBar.barStyle = UIStatusBarStyleLightContent;
 	navigationBar.translucent = NO;
-	navigationBar.barTintColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+	navigationBar.barTintColor = MP_HEX_RGB([darkPrimaryColor copy]);
 	
-	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
+	self.view.backgroundColor = MP_HEX_RGB([primaryColor copy]);
 	
 	[self.view setNeedsUpdateConstraints];
 }
@@ -84,7 +84,7 @@
 					   animated:YES
 					 completion:^{
 						 SEShape *shape = [[SEShape alloc] init];
-						 CGPoint points[] = {{160, 540}, {560, 540}, {560, 740}, {160, 740}};
+						 CGPoint points[] = {{440, 160}, {840, 260}, {840, 460}, {440, 560}};
 						 for (NSUInteger i = 0; i < 4; i++) {
 							 SEPoint *point = [[SEPoint alloc] init];
 							 point.x = points[i].x;

@@ -40,9 +40,9 @@
 	
 	navigationBar.barStyle = UIStatusBarStyleLightContent;
 	navigationBar.translucent = NO;
-	navigationBar.barTintColor = MP_HEX_RGB([defaultPrimaryColor copy]);
+	navigationBar.barTintColor = MP_HEX_RGB([darkPrimaryColor copy]);
 	
-	self.view.backgroundColor = MP_HEX_RGB([darkPrimaryColor copy]);
+	self.view.backgroundColor = MP_HEX_RGB([primaryColor copy]);
 	
 	[self.view addSubview:self.scrollView];
 	[self.scrollView addSubview:self.imageView];
