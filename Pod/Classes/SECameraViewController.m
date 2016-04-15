@@ -52,7 +52,7 @@
 		self.defaultPrimaryColor = MP_HEX_RGB([primaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
 		
-		self.idleTime = 10;
+		self.idleTime = 30;
 	}
 	return self;
 }
