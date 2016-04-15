@@ -21,7 +21,7 @@ const static NSString *primaryTextColor = @"F5F5F5";
 const static NSString *secondaryTextColor = @"727272";
 const static NSString *dividerColor = @"B6B6B6";
 
-const static NSInteger bottomToolbarHeight = 50;
+const static NSInteger bottomToolbarHeight = 49;
 
 const static CGFloat defaultAnimationDuration = .4f;
 
