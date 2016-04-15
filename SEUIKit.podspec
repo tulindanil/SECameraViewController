@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SEUIKit"
-  s.version          = "0.1.5"
+  s.version          = "0.2"
   s.summary          = "User interface kit for Smart Engines"
 
 # This description is used to generate tags and improve search results.
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/tulindanil/SEUIKit"
   s.license          = 'MIT'
   s.author           = { "tulindanil" => "tulindanil@gmail.com" }
-  s.source           = { :git => "https://github.com/tulindanil/SEUIKit.git", :tag => "0.1.5" }
+  s.source           = { :git => "https://github.com/tulindanil/SEUIKit.git", :tag => "0.2" }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '7.0'
