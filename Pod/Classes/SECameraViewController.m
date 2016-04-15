@@ -67,6 +67,8 @@
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
+    
+    [self updateCornerView];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -100,10 +102,13 @@
 	[super updateViewConstraints];
 }
 
-- (void)executeIfLandscape:(void(^)(void))landscapeBlock ifPortrait:(void(^)(void))portraitBlock {
-	if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && landscapeBlock != nil) {
+- (void)executeIfLandscape:(void(^)(void))landscapeBlock
+				ifPortrait:(void(^)(void))portraitBlock {
+	if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)
+		&& landscapeBlock != nil) {
 		landscapeBlock();
-	} else if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && portraitBlock != nil) {
+	} else if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)
+			   && portraitBlock != nil) {
 		portraitBlock();
 	}
 }
@@ -116,6 +121,7 @@
 											 selector:@selector(didChangeOrientation)
 												 name:UIDeviceOrientationDidChangeNotification
 											   object:nil];
+    
 	[self didChangeOrientation];
 }
 
@@ -137,6 +143,50 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:UIDeviceOrientationDidChangeNotification
 												  object:nil];
+}
+
+#pragma mark - Preview View offset
+
+- (void)updateCornerView {
+    CGFloat factor = 16 / 9;
+    if ([self.delegate respondsToSelector:@selector(previewViewCornerFactor:)]) {
+        factor = [self.delegate previewViewCornerFactor:self];
+    }
+    
+    if (UIDeviceOrientationIsLandscape(self.orientation))
+        factor = 1 / factor;
+    
+    [self setFactorCornerPreviewView:factor];
+}
+
+- (void)setFactorCornerPreviewView:(CGFloat)factor {
+    CGFloat offset = predscriptionViewCornerViewOffset;
+    CGFloat offsetY = MAX([self calculateYOffset:factor],
+                          offset);
+    CGFloat offsetX = MAX([self calculateXOffset:factor],
+                          offset);
+    CGPoint offsetPoint = CGPointMake(offsetX, offsetY);
+    [self.previewView.predscriptionView setCornerViewOffset:offsetPoint];
+}
+
+- (CGFloat)calculateXOffset:(CGFloat)factor {
+    CGFloat offset = predscriptionViewCornerViewOffset;
+    
+    CGFloat height = CGRectGetWidth(self.previewView.frame) - 2*offset;
+    CGFloat width = factor * height;
+    
+    CGFloat xOffset = (CGRectGetWidth(self.previewView.frame) - width) / 2;
+    return xOffset;
+}
+
+- (CGFloat)calculateYOffset:(CGFloat)factor {
+    CGFloat offset = predscriptionViewCornerViewOffset;
+    
+    CGFloat width = CGRectGetWidth(self.previewView.frame) - 2*offset;
+    CGFloat height = width / factor;
+    
+    CGFloat yOffset = (CGRectGetHeight(self.previewView.frame) - height) / 2;
+    return yOffset;
 }
 
 #pragma mark - Draw Shape
@@ -195,9 +245,11 @@
 
 - (void)didChangeOrientation {
 	UIDeviceOrientation orientation = self.orientation;
-	
+    [self updateCornerView];
+    
 	[UIView animateWithDuration:defaultAnimationDuration animations:^{
-		[self.previewView.predscriptionView rotatePredscriptionLabelForOrientation:orientation];
+		[self.previewView.predscriptionView
+		 rotatePredscriptionLabelForOrientation:orientation];
 	}];
 }
 
@@ -220,7 +272,8 @@
 
 - (void)didTapCloseButton:(id)sender {
 	[self dismissViewControllerAnimated:YES completion:^{
-		if ([self.delegate respondsToSelector:@selector(cameraViewControllerDidTapCloseButton:)]) {
+		if ([self.delegate
+			 respondsToSelector:@selector(cameraViewControllerDidTapCloseButton:)]) {
 			[self.delegate cameraViewControllerDidTapCloseButton:self];
 		}
 	}];
@@ -270,6 +323,7 @@
 #pragma mark - Vision Delegate
 
 - (void)visionSessionDidStartPreview:(SEVision *)vision {
+	
 	[self.shutterView openWithCompletion:^{
 		[self.previewView.predscriptionView showPredscriptionLabel:YES];
 		[self.engine startSession];
@@ -287,6 +341,7 @@
 
 - (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+	
 	CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
 	CVPixelBufferLockBaseAddress(imageBufferRef, 0);
 	
@@ -320,6 +375,7 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 - (NSData *)rotateBuffer:(const CVImageBufferRef)imageBufferRef
 				   width:(NSUInteger *)width
 				  height:(NSUInteger *)height {
+	
 	*width = CVPixelBufferGetWidth(imageBufferRef);
 	*height = CVPixelBufferGetHeight(imageBufferRef);
 	size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBufferRef);
@@ -379,52 +435,20 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 #pragma mark - OutputFormat
 
 - (void)setOutputFormat:(SEOutputFormat)outputFormat {
-	NSAssert(!self.isAppeared, @"Setting ouput format must be before loading view");
+	NSAssert(!self.isAppeared, @"Setting ouput format "
+			 					"must be before loading view");
 	_outputFormat = outputFormat;
 }
 
 #pragma mark - Flash Enabled
 
 - (void)setFlashEnabled:(BOOL)flashEnabled {
-	NSAssert(!self.isAppeared, @"Setting flash avalaibality format must be before loading view");
+	NSAssert(!self.isAppeared, @"Setting flash avalaibality"
+			 					"format must be before loading view");
 	_flashEnabled = flashEnabled;
 }
 
-#pragma mark - Buttons Container
-
-- (SERoundButtonsContainer *)buttonsContainer {
-	if (_buttonsContainer) {
-		return _buttonsContainer;
-	}
-	
-	_buttonsContainer = [[SERoundButtonsContainer alloc] init];
-	
-	if (self.isFlashEnabled) {
-		[_buttonsContainer addButton:self.lightButton];
-	}
-	
-	return _buttonsContainer;
-}
-
-- (UIButton *)lightButton {
-	if (_lightButton) {
-		return _lightButton;
-	}
-	
-	_lightButton = [[UIButton alloc] init];
-	[_lightButton setTitle:@"Light" forState:UIControlStateNormal];
-	[_lightButton sizeToFit];
-	
-	return _lightButton;
-}
-
 #pragma mark - UIViewController
-
-- (void)viewWillTransitionToSize:(CGSize)size
-	   withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator  {
-	[super viewWillTransitionToSize:size
-		  withTransitionCoordinator:coordinator];
-}
 
 - (BOOL)prefersStatusBarHidden {
 	return YES;

@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 					   width:(NSUInteger)width
 					  height:(NSUInteger)height;
 
+- (CGFloat)previewViewCornerFactor:(SECameraViewController *)cameraViewController;
+
 @required
 
 @end
