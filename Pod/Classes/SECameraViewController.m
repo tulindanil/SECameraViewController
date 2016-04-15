@@ -27,8 +27,6 @@
 
 @property (nonatomic, getter=isAppeared) BOOL appeared;
 
-@property (nonatomic, strong) SERoundButtonsContainer *buttonsContainer;
-
 @property (nonatomic, strong) UIButton *lightButton;
 
 @property (nonatomic, readwrite) UIDeviceOrientation orientation;
