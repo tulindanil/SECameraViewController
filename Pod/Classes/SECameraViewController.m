@@ -65,8 +65,6 @@
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
-    
-    [self updateCornerView];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -119,12 +117,11 @@
 											 selector:@selector(didChangeOrientation)
 												 name:UIDeviceOrientationDidChangeNotification
 											   object:nil];
-    
-	[self didChangeOrientation];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+    [self didChangeOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -151,7 +148,7 @@
         factor = [self.delegate previewViewCornerFactor:self];
     }
     
-    if (UIDeviceOrientationIsLandscape(self.orientation))
+    if (self.orientation != UIDeviceOrientationPortrait)
         factor = 1 / factor;
     
     [self setFactorCornerPreviewView:factor];
@@ -170,7 +167,7 @@
 - (CGFloat)calculateXOffset:(CGFloat)factor {
     CGFloat offset = predscriptionViewCornerViewOffset;
     
-    CGFloat height = CGRectGetWidth(self.previewView.frame) - 2*offset;
+    CGFloat height = CGRectGetHeight(self.previewView.frame) - 2*offset;
     CGFloat width = factor * height;
     
     CGFloat xOffset = (CGRectGetWidth(self.previewView.frame) - width) / 2;
@@ -242,12 +239,11 @@
 }
 
 - (void)didChangeOrientation {
-	UIDeviceOrientation orientation = self.orientation;
     [self updateCornerView];
     
 	[UIView animateWithDuration:defaultAnimationDuration animations:^{
 		[self.previewView.predscriptionView
-		 rotatePredscriptionLabelForOrientation:orientation];
+		 rotatePredscriptionLabelForOrientation:self.orientation];
 	}];
 }
 
