@@ -17,4 +17,6 @@
 
 - (void)rotatePredscriptionLabelForOrientation:(UIDeviceOrientation)orientation;
 
+@property (nonatomic) CGPoint cornerViewOffset;
+
 @end

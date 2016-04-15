@@ -22,6 +22,14 @@
 
 @implementation SEPredscriptionView
 
+- (instancetype)init {
+	if (self = [super init]) {
+		_cornerViewOffset = CGPointMake(predscriptionViewCornerViewOffset,
+											predscriptionViewCornerViewOffset);
+	}
+	return self;
+}
+
 - (void)didMoveToSuperview {
 	[super didMoveToSuperview];
 	
@@ -37,24 +45,26 @@
 	[self.topLeft mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.topLeft];
-		make.left.top.equalTo(self).offset(predscriptionViewCornerViewOffset);
+		make.left.equalTo(self).offset(self.cornerViewOffset.x);
+		make.top.equalTo(self).offset(self.cornerViewOffset.y);
 	}];
 	[self.topRight mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.topRight];
-		make.top.equalTo(self).offset(predscriptionViewCornerViewOffset);
-		make.right.equalTo(self).offset(-predscriptionViewCornerViewOffset);
+		make.top.equalTo(self).offset(self.cornerViewOffset.y);
+		make.right.equalTo(self).offset(-self.cornerViewOffset.x);
 	}];
 	[self.bottomLeft mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.bottomLeft];
-		make.bottom.equalTo(self).offset(-predscriptionViewCornerViewOffset);
-		make.left.equalTo(self).offset(predscriptionViewCornerViewOffset);
+		make.bottom.equalTo(self).offset(-self.cornerViewOffset.y);
+		make.left.equalTo(self).offset(self.cornerViewOffset.x);
 	}];
 	[self.bottomRight mas_remakeConstraints:^(MASConstraintMaker *make) {
 		[self makeSizeFixed:make
 				   withView:self.bottomRight];
-		make.right.bottom.equalTo(self).offset(-predscriptionViewCornerViewOffset);
+		make.right.equalTo(self).offset(-self.cornerViewOffset.x);
+		make.bottom.equalTo(self).offset(-self.cornerViewOffset.y);
 	}];
 	
 	[self.predscriptionLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -69,8 +79,17 @@
 	make.height.equalTo(@(CGRectGetHeight(view.frame)));
 }
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
+#pragma mark - CornerViewOffset
+
+- (void)setCornerViewOffset:(CGPoint)cornerViewOffset {
+	_cornerViewOffset = cornerViewOffset;
+	[self layoutIfNeeded];
+	[self setNeedsUpdateConstraints];
+	[self updateConstraintsIfNeeded];
+	[UIView animateWithDuration:defaultAnimationDuration
+					 animations:^{
+						 [self layoutIfNeeded];
+	}];
 }
 
 #pragma mark - Prescription Label
