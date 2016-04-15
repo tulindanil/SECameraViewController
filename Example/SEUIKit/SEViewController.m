@@ -77,7 +77,7 @@
 	SECameraViewController *cameraViewController = [[SECameraViewController alloc]
 													init];
 	cameraViewController.delegate = self;
-	cameraViewController.outputFormat = SEOutputFormatWidescreen;
+	cameraViewController.outputFormat = SEOutputFormatSquare;
 	cameraViewController.flashEnabled = YES;
     cameraViewController.label = [@"place" uppercaseString];
 	

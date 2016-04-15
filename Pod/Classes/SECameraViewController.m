@@ -82,7 +82,7 @@
 		if (self.outputFormat == SEOutputFormatSquare) {
 			make.center.equalTo(self.view);
 			make.width.equalTo(self.view);
-			make.height.equalTo(self.previewView.mas_width);
+			make.height.equalTo(self.view.mas_width);
 		} else if (self.outputFormat == SEOutputFormatWidescreen) {
 			make.top.left.right.equalTo(self.view);
             if (self.closeButtonEnabled == NO)
@@ -96,9 +96,10 @@
     
     if (self.closeButtonEnabled) {
         [self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            if (self.outputFormat == SEOutputFormatWidescreen)
+                make.top.equalTo(self.previewView.mas_bottom);
             make.width.equalTo(self.view.mas_width);
             make.bottom.equalTo(self.view.mas_bottom);
-            make.top.equalTo(self.previewView.mas_bottom);
             make.height.equalTo(@(50));
         }];
     }
