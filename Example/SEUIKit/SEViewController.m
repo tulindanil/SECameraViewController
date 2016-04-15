@@ -101,7 +101,7 @@
 #pragma mark - SECameraViewConrtollerDelegate
 
 - (CGFloat)previewViewCornerFactor:(SECameraViewController *)cameraViewController {
-    return 3.370 / 2.125;
+    return 85.60f / 53.98f;
 }
 
 - (void)cameraViewControllerDidTapCloseButton:(SECameraViewController *)cameraViewController {
