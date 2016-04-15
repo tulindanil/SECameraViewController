@@ -28,6 +28,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 
 @property (nonatomic, weak) id<EngineProtocol> engine;
 
+@property (nonatomic, readonly) UIDeviceOrientation orientation;
+
 - (void)addShape:(SEShape *)shape;
 - (void)clearShapes;
 

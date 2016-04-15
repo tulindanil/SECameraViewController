@@ -31,7 +31,7 @@
 
 @property (nonatomic, strong) UIButton *lightButton;
 
-@property (nonatomic) UIDeviceOrientation orientation;
+@property (nonatomic, readwrite) UIDeviceOrientation orientation;
 
 @end
 
