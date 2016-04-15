@@ -11,9 +11,9 @@
 #ifndef Constants_h
 #define Constants_h
 
-const static NSString *primaryColor = @"9E9E9E";
-const static NSString *darkPrimaryColor = @"616161";
-const static NSString *accentColor = @"607D8B";
+const static NSString *darkPrimaryColor = @"1A1A1C";
+const static NSString *primaryColor = @"121315";
+const static NSString *accentColor = @"9E9E9E";
 
 const static NSString *lightPrimaryColor = @"F5F5F5";
 const static NSString *primaryTextColor = @"F5F5F5";
