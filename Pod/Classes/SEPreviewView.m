@@ -65,7 +65,7 @@
 	[self.shapeView clearShapes];
 }
 
-- (SEShape *)shapeView {
+- (SEShapeView *)shapeView {
 	if (_shapeView)
 		return _shapeView;
 	
