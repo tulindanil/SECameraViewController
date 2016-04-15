@@ -40,6 +40,8 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 - (void)showLabel;
 - (void)hideLabel;
 
+@property (nonatomic) BOOL closeButtonEnabled;
+
 @property (nonatomic) UIColor *defaultPrimaryColor;
 @property (nonatomic) UIColor *darkPrimaryColor;
 @property (nonatomic) UIColor *accentColor;

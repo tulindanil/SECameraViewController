@@ -50,6 +50,8 @@
 		self.defaultPrimaryColor = MP_HEX_RGB([primaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
 		
+        self.closeButtonEnabled = YES;
+        
 		self.idleTime = 30;
 	}
 	return self;
@@ -61,7 +63,9 @@
 	self.view.backgroundColor = self.darkPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
-	[self.view addSubview:self.closeButton];
+    
+    if (self.closeButtonEnabled)
+		[self.view addSubview:self.closeButton];
 	
 	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
@@ -81,19 +85,23 @@
 			make.height.equalTo(self.previewView.mas_width);
 		} else if (self.outputFormat == SEOutputFormatWidescreen) {
 			make.top.left.right.equalTo(self.view);
-			make.bottom.equalTo(self.closeButton.mas_top);
+            if (self.closeButtonEnabled == NO)
+                make.bottom.equalTo(self.view);
 		}
 	}];
 	
 	[self.shutterView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self.previewView);
 	}];
-	
-	[self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-		make.width.equalTo(self.view.mas_width);
-		make.bottom.equalTo(self.view.mas_bottom);
-		make.height.equalTo(@(50));
-	}];
+    
+    if (self.closeButtonEnabled) {
+        [self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(self.view.mas_width);
+            make.bottom.equalTo(self.view.mas_bottom);
+            make.top.equalTo(self.previewView.mas_bottom);
+            make.height.equalTo(@(50));
+        }];
+    }
 	
 	[super updateViewConstraints];
 }
