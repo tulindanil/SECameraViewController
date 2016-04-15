@@ -13,7 +13,7 @@
 #import "SEEngineProtocol.h"
 
 typedef NS_ENUM(NSInteger, SEOutputFormat) {
-	SEOutputFormatSquare, // 1:1
+	SEOutputFormatSquare,      // 1:1
 	SEOutputFormatWidescreen, // 16:9
 };
 
