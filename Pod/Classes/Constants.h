@@ -11,6 +11,8 @@
 #ifndef Constants_h
 #define Constants_h
 
+const static CGFloat offset = 15.0f;
+
 const static NSString *darkPrimaryColor = @"1A1A1C";
 const static NSString *primaryColor = @"121315";
 const static NSString *accentColor = @"9E9E9E";
