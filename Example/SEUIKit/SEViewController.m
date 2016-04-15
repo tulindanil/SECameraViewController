@@ -79,25 +79,30 @@
 	cameraViewController.delegate = self;
 	cameraViewController.outputFormat = SEOutputFormatWidescreen;
 	cameraViewController.flashEnabled = YES;
+    cameraViewController.label = [@"place" uppercaseString];
 	
 	[self presentViewController:cameraViewController
 					   animated:YES
 					 completion:^{
-						 SEShape *shape = [[SEShape alloc] init];
-						 CGPoint points[] = {{440, 160}, {840, 260}, {840, 460}, {440, 560}};
-						 for (NSUInteger i = 0; i < 4; i++) {
-							 SEPoint *point = [[SEPoint alloc] init];
-							 point.x = points[i].x;
-							 point.y = points[i].y;
-							 
-							 [shape insertPoint:point atIndex:i];
-						 }
-						 
-						 [cameraViewController addShape:shape];
+//						 SEShape *shape = [[SEShape alloc] init];
+//						 CGPoint points[] = {{440, 160}, {840, 260}, {840, 460}, {440, 560}};
+//						 for (NSUInteger i = 0; i < 4; i++) {
+//							 SEPoint *point = [[SEPoint alloc] init];
+//							 point.x = points[i].x;
+//							 point.y = points[i].y;
+//							 
+//							 [shape insertPoint:point atIndex:i];
+//						 }
+//						 
+//						 [cameraViewController addShape:shape];
 					 }];
 }
 
 #pragma mark - SECameraViewConrtollerDelegate
+
+- (CGFloat)previewViewCornerFactor:(SECameraViewController *)cameraViewController {
+    return 3.370 / 2.125;
+}
 
 - (void)cameraViewControllerDidTapCloseButton:(SECameraViewController *)cameraViewController {
 	if (!self.imageShowSwitch.isOn)
