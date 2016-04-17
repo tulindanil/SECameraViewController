@@ -46,6 +46,9 @@ typedef NS_ENUM(NSInteger, SEOutputFormat) {
 @property (nonatomic) UIColor *darkPrimaryColor;
 @property (nonatomic) UIColor *accentColor;
 
+- (void)startWithCompletion:(void (^)())block;
+- (void)stopWithCompletion:(void (^)())block;
+
 @end
 
 @protocol SECameraViewControllerDelegate <NSObject>

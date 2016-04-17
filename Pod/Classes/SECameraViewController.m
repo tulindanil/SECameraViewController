@@ -63,7 +63,7 @@
 	self.view.backgroundColor = self.defaultPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
-    [self start];
+    [self startWithCompletion:nil];
     
     if (self.closeButtonEnabled)
 		[self.view addSubview:self.closeButton];
@@ -136,7 +136,7 @@
 	[super viewWillDisappear:animated];
 	self.appeared = NO;
     
-    [self stop];
+    [self stopWithCompletion:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -148,14 +148,18 @@
 
 #pragma mark - Start / Stop methods
 
-- (void)start {
+- (void)startWithCompletion:(void (^)())block {
     [self.vision startPreview];
+    if (block != nil)
+        block();
 }
 
-- (void)stop {
+- (void)stopWithCompletion:(void (^)())block {
     [self.vision stopPreview];
     [self.engine stopSession];
     [self.shutterView close];
+    if (block != nil)
+        block();
 }
 
 #pragma mark - Preview View offset
