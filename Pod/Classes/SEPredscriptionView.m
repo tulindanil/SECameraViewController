@@ -103,7 +103,7 @@
 	_predscriptionLabel.text = self.predscription;
 	_predscriptionLabel.textColor = MP_HEX_RGB([primaryTextColor copy]);
 	_predscriptionLabel.alpha = .0f;
-	_predscriptionLabel.font = [UIFont systemFontOfSize:32.0f];
+	_predscriptionLabel.font = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
 	
 	return _predscriptionLabel;
 }
