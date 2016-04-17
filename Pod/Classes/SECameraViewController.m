@@ -73,6 +73,8 @@
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	self.vision.previewLayer.frame = self.previewView.bounds;
+    
+    [self.previewView bringSubviewToFront:self.shutterView];
 }
 
 - (void)updateViewConstraints {
