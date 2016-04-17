@@ -68,8 +68,19 @@
 
 - (void)stopPreview {
 	[self enqueueBlockInVisionQueue:^{
-		[self.captureSession stopRunning];
-		[self executeBlockInMainQueue:^{
+        self.isConnectionsInitialized = NO;
+        
+        [self.captureSession removeOutput:self.captureVideoDataOutput];
+        _captureVideoDataOutput = nil;
+        
+        [self.captureSession removeInput:self.rearCamera];
+        _rearCameraInput = nil;
+        
+        _previewLayer = nil;
+        
+        [self.captureSession stopRunning];
+        
+		[self enqueueBlockInMainQueue:^{
 			if ([self.delegate respondsToSelector:@selector(visionSessionDidStopPreview:)]) {
 				[self.delegate visionSessionDidStopPreview:self];
 			}
@@ -101,7 +112,8 @@
 - (AVCaptureDeviceInput *)rearCameraInput
 {
 	if (!_rearCameraInput) {
-		_rearCameraInput = [AVCaptureDeviceInput deviceInputWithDevice:self.rearCamera error:nil];
+		_rearCameraInput = [AVCaptureDeviceInput deviceInputWithDevice:self.rearCamera
+                                                                 error:nil];
 	}
 	return _rearCameraInput;
 }
@@ -168,10 +180,5 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 	}
 }
 
-- (void)executeBlockInMainQueue:(void (^)(void))block {
-	if (block != nil) {
-		dispatch_sync(dispatch_get_main_queue(), block);
-	}
-}
 
 @end
