@@ -155,6 +155,7 @@
 }
 
 - (void)stopWithCompletion:(void (^)())block {
+    [self clearShapes];
     [self.vision stopPreview];
     [self.engine stopSession];
     [self.shutterView closeWithCompletion:block];
