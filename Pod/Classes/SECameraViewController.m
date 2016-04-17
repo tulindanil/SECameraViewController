@@ -176,25 +176,23 @@
 #pragma mark - Preview View offset
 
 - (void)updateCornerView {
-    CGFloat factor = 16 / 9;
-    if ([self.delegate respondsToSelector:@selector(previewViewCornerFactor:)]) {
-        factor = [self.delegate previewViewCornerFactor:self];
-    }
-    
-    if (self.orientation != UIDeviceOrientationPortrait)
-        factor = 1 / factor;
-    
+    CGFloat factor = [self getPredscriptionAreaRatio];
     [self setFactorCornerPreviewView:factor];
 }
 
 - (void)setFactorCornerPreviewView:(CGFloat)factor {
+    CGPoint offsetPoint = [self getFactorCornerPreviewView:factor];
+    [self.previewView.predscriptionView setCornerViewOffset:offsetPoint];
+}
+
+- (CGPoint)getFactorCornerPreviewView:(CGFloat)factor {
     CGFloat offset = predscriptionViewCornerViewOffset;
     CGFloat offsetY = MAX([self calculateYOffset:factor],
                           offset);
     CGFloat offsetX = MAX([self calculateXOffset:factor],
                           offset);
     CGPoint offsetPoint = CGPointMake(offsetX, offsetY);
-    [self.previewView.predscriptionView setCornerViewOffset:offsetPoint];
+    return offsetPoint;
 }
 
 - (CGFloat)calculateXOffset:(CGFloat)factor {
@@ -280,6 +278,17 @@
 	}];
 }
 
+- (CGFloat)getPredscriptionAreaRatio {
+    CGFloat factor = 16 / 9;
+    if ([self.delegate respondsToSelector:@selector(previewViewCornerFactor:)]) {
+        factor = [self.delegate previewViewCornerFactor:self];
+    }
+    
+    if (self.orientation != UIDeviceOrientationPortrait)
+        factor = 1 / factor;
+    return factor;
+}
+
 #pragma mark - CloseButton
 
 - (UIButton *)closeButton {
@@ -344,6 +353,62 @@
 	return _vision;
 }
 
+- (CGSize)getCurrentOutputSize {
+    CGSize size = self.vision.outputSize;
+    
+    if (UIDeviceOrientationIsPortrait(self.orientation))
+        size = CGSizeMake(size.height, size.width);
+    
+    return size;
+}
+
+- (SEShape *)getRecognizeArea {
+    SEShape *shape = [[SEShape alloc] init];
+    
+    CGFloat factor = [self getPredscriptionAreaRatio];
+    CGSize outputSize = [self getCurrentOutputSize];
+    
+    CGFloat outputFactor = outputSize.width / outputSize.height;
+    
+    CGPoint center = CGPointMake(outputSize.width / 2,
+                                 outputSize.height / 2);
+    
+    CGPoint points[4];
+    if (factor > outputFactor) {
+        
+        CGFloat heigth = outputSize.width / factor;
+        
+        CGFloat topLevel = center.y - heigth/2;
+        CGFloat bottomLevel = center.y + heigth/2;
+        
+        points[0] = CGPointMake(0, topLevel);
+        points[1] = CGPointMake(outputSize.width, topLevel);
+        points[2] = CGPointMake(outputSize.width, bottomLevel);
+        points[3] = CGPointMake(0, bottomLevel);
+        
+    } else {
+        
+        CGFloat width = outputSize.height * factor;
+        
+        CGFloat leftLevel = center.x - width/2;
+        CGFloat rightLevel = center.x + width/2;
+        
+        points[0] = CGPointMake(leftLevel, 0);
+        points[1] = CGPointMake(rightLevel, 0);
+        points[2] = CGPointMake(rightLevel, outputSize.height);
+        points[3] = CGPointMake(leftLevel, outputSize.height);
+    }
+    
+    for (NSUInteger i = 0; i < 4; i++) {
+         SEPoint *point = [[SEPoint alloc] init];
+         point.x = points[i].x;
+         point.y = points[i].y;
+         [shape insertPoint:point atIndex:i];
+     }
+    
+    return shape;
+}
+
 #pragma mark - Vision Delegate
 
 - (void)visionSessionDidStartPreview:(SEVision *)vision {
@@ -375,9 +440,11 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 								width:&width
 							   height:&height];
 	
+    SEShape *shape = [self getRecognizeArea];
 	[self.engine feedBGRAImageData:data
 							 width:width
-							height:height];
+							height:height
+                              area:shape];
 	
 	if ([self.delegate respondsToSelector:@selector(cameraViewController:
 													didCaptureBGRASampleData:
