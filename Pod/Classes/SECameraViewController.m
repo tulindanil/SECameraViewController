@@ -60,7 +60,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	self.view.backgroundColor = self.darkPrimaryColor;
+	self.view.backgroundColor = self.defaultPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
     
