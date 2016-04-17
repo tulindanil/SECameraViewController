@@ -157,9 +157,7 @@
 - (void)stopWithCompletion:(void (^)())block {
     [self.vision stopPreview];
     [self.engine stopSession];
-    [self.shutterView close];
-    if (block != nil)
-        block();
+    [self.shutterView closeWithCompletion:block];
 }
 
 #pragma mark - Preview View offset
