@@ -63,17 +63,16 @@
 	self.view.backgroundColor = self.defaultPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
-    [self startWithCompletion:nil];
     
     if (self.closeButtonEnabled)
 		[self.view addSubview:self.closeButton];
-	[self.view setNeedsUpdateConstraints];
+    
+    [self startWithCompletion:nil];
 }
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	self.vision.previewLayer.frame = self.previewView.bounds;
-	[self.previewView bringSubviewToFront:self.shutterView];
 }
 
 - (void)updateViewConstraints {
@@ -149,15 +148,26 @@
 #pragma mark - Start / Stop methods
 
 - (void)startWithCompletion:(void (^)())block {
+    AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
+    
+    [self.previewView.layer insertSublayer:previewLayer
+                                   atIndex:0];
+    [self.view setNeedsUpdateConstraints];
     [self.vision startPreview];
+    
     if (block != nil)
         block();
 }
 
 - (void)stopWithCompletion:(void (^)())block {
+    [self.vision.previewLayer removeFromSuperlayer];
+    
     [self clearShapes];
     [self.vision stopPreview];
+    
     [self.engine stopSession];
+    _engine = nil;
+    
     [self.shutterView closeWithCompletion:block];
 }
 
@@ -313,9 +323,6 @@
 	_previewView = [[SEPreviewView alloc] init];
 	_previewView.backgroundColor = [UIColor blackColor];
 	_previewView.predscriptionView.predscription = [self.label uppercaseString];
-	
-	AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
-	[_previewView.layer addSublayer:previewLayer];
 	
 	_shutterView = [[SEShutterView alloc] init];
 	[_previewView addSubview:_shutterView];
