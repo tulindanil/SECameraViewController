@@ -356,7 +356,7 @@
 - (CGSize)getCurrentOutputSize {
     CGSize size = self.vision.outputSize;
     
-    if (UIDeviceOrientationIsPortrait(self.orientation))
+    if (self.orientation == UIDeviceOrientationPortrait)
         size = CGSizeMake(size.height, size.width);
     
     return size;
