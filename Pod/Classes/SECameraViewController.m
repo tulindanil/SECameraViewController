@@ -63,11 +63,10 @@
 	self.view.backgroundColor = self.defaultPrimaryColor;
 	
 	[self.view addSubview:self.previewView];
+    [self start];
     
     if (self.closeButtonEnabled)
 		[self.view addSubview:self.closeButton];
-	
-	[self.vision startPreview];
 	[self.view setNeedsUpdateConstraints];
 }
 
@@ -135,18 +134,28 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[self.shutterView close];
 	self.appeared = NO;
+    
+    [self stop];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-	[self.vision stopPreview];
-	[self.engine stopSession];
-	
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:UIDeviceOrientationDidChangeNotification
 												  object:nil];
+}
+
+#pragma mark - Start / Stop methods
+
+- (void)start {
+    [self.vision startPreview];
+}
+
+- (void)stop {
+    [self.vision stopPreview];
+    [self.engine stopSession];
+    [self.shutterView close];
 }
 
 #pragma mark - Preview View offset
