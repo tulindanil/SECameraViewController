@@ -365,7 +365,7 @@
 - (SEShape *)getRecognizeArea {
     SEShape *shape = [[SEShape alloc] init];
     
-    CGFloat factor = [self getPredscriptionAreaRatio];
+    CGFloat factor = [self.delegate previewViewCornerFactor:self];
     CGSize outputSize = [self getCurrentOutputSize];
     
     CGFloat outputFactor = outputSize.width / outputSize.height;
@@ -397,6 +397,7 @@
         points[1] = CGPointMake(rightLevel, 0);
         points[2] = CGPointMake(rightLevel, outputSize.height);
         points[3] = CGPointMake(leftLevel, outputSize.height);
+        
     }
     
     for (NSUInteger i = 0; i < 4; i++) {
@@ -404,7 +405,7 @@
          point.x = points[i].x;
          point.y = points[i].y;
          [shape insertPoint:point atIndex:i];
-     }
+    }
     
     return shape;
 }
