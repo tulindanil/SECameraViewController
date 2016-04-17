@@ -68,14 +68,6 @@
 
 - (void)stopPreview {
 	[self enqueueBlockInVisionQueue:^{
-        self.isConnectionsInitialized = NO;
-        
-        [self.captureSession removeOutput:self.captureVideoDataOutput];
-        _captureVideoDataOutput = nil;
-        
-        [self.captureSession removeInput:self.rearCamera];
-        _rearCameraInput = nil;
-        
         _previewLayer = nil;
         
         [self.captureSession stopRunning];
