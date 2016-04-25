@@ -9,6 +9,8 @@
 #import "SEViewController.h"
 #import "SEImageViewController.h"
 
+static const DDLogLevel ddLogLevel = DDLogLevelDebug;
+
 @interface SEViewController () <SECameraViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *cameraButton;
@@ -128,7 +130,7 @@
 					  height:(NSUInteger)height {
 	static dispatch_once_t predicate = 0;
 	dispatch_once(&predicate, ^(){
-		NSLog(@"Width: %zu, Height: %zu", (unsigned long)width, (unsigned long)height);
+		DDLogDebug(@"Get first buffer: Width: %zu, Height: %zu", (unsigned long)width, (unsigned long)height);
 	});
 	
 	NSUInteger dataLength = width * height * 4;
