@@ -12,8 +12,3 @@
 
 #import <Masonry/Masonry.h>
 #import <MPColorTools/MPColorTools.h>
-
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-
-static const DDLogLevel ddLogLevel = DDLogLevelAll;
