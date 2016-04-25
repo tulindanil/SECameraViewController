@@ -39,5 +39,5 @@ Pod::Spec.new do |s|
   s.prefix_header_contents = '#import "Masonry.h"', '#import "Constants.h"', '#import "MPColorTools.h"'
   s.dependency 'MPColorTools'
   s.dependency 'Masonry'
-  s.dependency 'NSLogger'
+  s.dependency 'CocoaLumberjack' 
 end
