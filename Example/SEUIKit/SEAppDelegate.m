@@ -22,11 +22,6 @@
 	self.window.rootViewController = navigationController;
 	[self.window makeKeyAndVisible];
     
-    [DDLog addLogger:[DDASLLogger sharedInstance]];
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    
-    DDLogDebug(@"Did start logging");
-    
 	return YES;
 }
 
