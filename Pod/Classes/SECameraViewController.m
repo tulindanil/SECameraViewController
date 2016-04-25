@@ -58,6 +58,7 @@
 }
 
 - (void)viewDidLoad {
+    DDLogDebug(@"CameraVC: viewDidLoad");
 	[super viewDidLoad];
 	
 	self.view.backgroundColor = self.defaultPrimaryColor;
@@ -71,6 +72,7 @@
 }
 
 - (void)viewDidLayoutSubviews {
+    DDLogDebug(@"CameraVC: viewDidLayoutSubviews");
 	[super viewDidLayoutSubviews];
 	self.vision.previewLayer.frame = self.previewView.bounds;
     
@@ -78,6 +80,7 @@
 }
 
 - (void)updateViewConstraints {
+    DDLogDebug(@"CameraVC: updateViewConstraints");
 	[self.previewView mas_remakeConstraints:^(MASConstraintMaker *make) {
 		if (self.outputFormat == SEOutputFormatSquare) {
 			make.center.equalTo(self.view);
@@ -119,6 +122,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    DDLogDebug(@"CameraVC: viewWillAppear:");
 	[super viewWillAppear:animated];
 	self.appeared = YES;
 	
@@ -129,11 +133,13 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    DDLogDebug(@"CameraVC: viewDidAppear:");
 	[super viewDidAppear:animated];
     [self didChangeOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    DDLogDebug(@"CameraVC: viewWillDisappear:");
 	[super viewWillDisappear:animated];
 	self.appeared = NO;
     
@@ -141,6 +147,7 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    DDLogDebug(@"CameraVC: viewDidDisappear:");
 	[super viewDidDisappear:animated];
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:UIDeviceOrientationDidChangeNotification
@@ -150,6 +157,7 @@
 #pragma mark - Start / Stop methods
 
 - (void)startWithCompletion:(void (^)())block {
+    DDLogDebug(@"CameraVC: startWithCompletion:");
     AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
     
     [self.previewView.layer insertSublayer:previewLayer
@@ -162,6 +170,7 @@
 }
 
 - (void)stopWithCompletion:(void (^)())block {
+    DDLogDebug(@"CameraVC: stopWithCompletion:");
     [self.vision.previewLayer removeFromSuperlayer];
     
     [self clearShapes];
@@ -413,7 +422,7 @@
 #pragma mark - Vision Delegate
 
 - (void)visionSessionDidStartPreview:(SEVision *)vision {
-	
+    DDLogDebug(@"CameraVC: visionSessionDidStartPreview:");
 	[self.shutterView openWithCompletion:^{
 		[self.previewView.predscriptionView showPredscriptionLabel:YES];
 		[self.engine startSession];
@@ -431,7 +440,7 @@
 
 - (void)vision:(SEVision *)vision
 didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-	
+	DDLogVerbose(@"CameraVC: didCaptureVideoSampleBuffer:");
 	CVImageBufferRef imageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer);
 	CVPixelBufferLockBaseAddress(imageBufferRef, 0);
 	
@@ -497,7 +506,7 @@ didCaptureVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 											   backColor,
 											   0);
 	if (err != kvImageNoError)
-		NSLog(@"%ld", err);
+		DDLogError(@"Couldn't rotate buffer %ld", err);
 
 	return [NSData dataWithBytesNoCopy:outBuff
 								length:currSize
