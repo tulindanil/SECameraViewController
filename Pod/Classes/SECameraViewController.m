@@ -46,6 +46,7 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
+        [self initializeLogger];
 		self.darkPrimaryColor = MP_HEX_RGB([darkPrimaryColor copy]);
 		self.defaultPrimaryColor = MP_HEX_RGB([primaryColor copy]);
 		self.accentColor = MP_HEX_RGB([accentColor copy]);
@@ -57,18 +58,24 @@
 	return self;
 }
 
+- (void)initializeLogger {
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+        [DDLog addLogger:[DDASLLogger sharedInstance]];
+        [DDLog addLogger:[DDTTYLogger sharedInstance]];
+        DDLogDebug(@"Did start logging");
+    });
+}
+
 - (void)viewDidLoad {
     DDLogDebug(@"CameraVC: viewDidLoad");
 	[super viewDidLoad];
 	
 	self.view.backgroundColor = self.defaultPrimaryColor;
-	
 	[self.view addSubview:self.previewView];
     
     if (self.closeButtonEnabled)
 		[self.view addSubview:self.closeButton];
-    
-    [self startWithCompletion:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -124,62 +131,78 @@
 - (void)viewWillAppear:(BOOL)animated {
     DDLogDebug(@"CameraVC: viewWillAppear:");
 	[super viewWillAppear:animated];
-	self.appeared = YES;
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(didChangeOrientation)
-												 name:UIDeviceOrientationDidChangeNotification
-											   object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     DDLogDebug(@"CameraVC: viewDidAppear:");
 	[super viewDidAppear:animated];
-    [self didChangeOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     DDLogDebug(@"CameraVC: viewWillDisappear:");
 	[super viewWillDisappear:animated];
-	self.appeared = NO;
-    
-    [self stopWithCompletion:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     DDLogDebug(@"CameraVC: viewDidDisappear:");
 	[super viewDidDisappear:animated];
-	[[NSNotificationCenter defaultCenter] removeObserver:self
-													name:UIDeviceOrientationDidChangeNotification
-												  object:nil];
 }
 
 #pragma mark - Start / Stop methods
 
 - (void)startWithCompletion:(void (^)())block {
+    
+    if (self.isAppeared == YES) {
+        DDLogWarn(@"CameraVC is already started");
+        return;
+    }
+    
     DDLogDebug(@"CameraVC: startWithCompletion:");
+    [self clearShapes];
+    self.appeared = YES;
     AVCaptureVideoPreviewLayer *previewLayer = self.vision.previewLayer;
     
     [self.previewView.layer insertSublayer:previewLayer
                                    atIndex:0];
+    
     [self.view setNeedsUpdateConstraints];
     [self.vision startPreview];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didChangeOrientation)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    
+    [self didChangeOrientation];
     
     if (block != nil)
         block();
 }
 
 - (void)stopWithCompletion:(void (^)())block {
-    DDLogDebug(@"CameraVC: stopWithCompletion:");
-    [self.vision.previewLayer removeFromSuperlayer];
     
+    if (self.isAppeared == NO) {
+        DDLogWarn(@"CameraVC is already stopped");
+        return;
+    }
+    
+    DDLogDebug(@"CameraVC: stopWithCompletion:");
     [self clearShapes];
-    [self.vision stopPreview];
     
     [self.engine stopSession];
     _engine = nil;
     
-    [self.shutterView closeWithCompletion:block];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceOrientationDidChangeNotification
+                                                  object:nil];
+    
+    [self.shutterView closeWithCompletion:^{
+        [self.vision stopPreview];
+        [self.vision.previewLayer removeFromSuperlayer];
+        self.appeared = NO;
+        if (block != nil)
+        	block();
+    }];
 }
 
 #pragma mark - Preview View offset
@@ -237,7 +260,12 @@
 }
 
 - (void)addShape:(SEShape *)shape {
-	
+    if (self.isAppeared == NO) {
+        DDLogWarn(@"CameraVC: did not appear, can't add shape");
+        return;
+    }
+    
+    DDLogVerbose(@"CameraVC: addShape:");
 	CGSize previewSize = self.previewView.frame.size;
 	CGSize outputSize = self.vision.outputSize;
 	
@@ -427,15 +455,6 @@
 		[self.previewView.predscriptionView showPredscriptionLabel:YES];
 		[self.engine startSession];
 	}];
-	
-	dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-		[NSThread sleepForTimeInterval:self.idleTime];
-		dispatch_async(dispatch_get_main_queue(), ^{
-			if (self.isAppeared)
-				[self dismissViewControllerAnimated:YES
-										 completion:nil];
-		});
-	});
 }
 
 - (void)vision:(SEVision *)vision
