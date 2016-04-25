@@ -36,7 +36,8 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.prefix_header_contents = '#import "Masonry.h"', '#import "Constants.h"', '#import "MPColorTools.h"'
+  s.prefix_header_contents = '#import "Masonry.h"', '#import "Constants.h"', '#import "MPColorTools.h"', '#define LOG_LEVEL_DEF ddLogLevel', '#import <CocoaLumberjack/CocoaLumberjack.h>',
+  'static const DDLogLevel ddLogLevel = DDLogLevelDebug;'
   s.dependency 'MPColorTools'
   s.dependency 'Masonry'
   s.dependency 'CocoaLumberjack' 
